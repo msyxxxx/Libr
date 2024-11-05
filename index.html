@@ -63,6 +63,20 @@
             z-index: 1001;
         }
 
+.music-button {
+    background: none;
+    border: none;
+    color: #fff;
+    font-size: 20px;
+    cursor: pointer;
+    margin-top: 10px;
+    transition: color 0.3s;
+}
+
+.music-button:hover {
+    color: #ffcc00;
+}
+
         /* إعداد الأزرار */
         .button {
             background-color: #2B124C;
@@ -131,11 +145,21 @@
     </style>
 </head>
 <body>
+</div>
     <div class="menu-icon" onclick="toggleSidebar()">☰</div>
     <div class="sidebar" id="sidebar">
         <h2>Réglages - الاعدادات ⚙️</h2>
         <div class="language-switch" onclick="toggleLanguage()">Changer la langue - تغيير اللغة</div>
     </div>
+
+<button class="music-button" onclick="toggleMusic()">
+    🔊
+</button>
+<audio id="backgroundMusic" loop>
+    <source src="music.mp3" type="audio/mpeg">
+    المتصفح الخاص بك لا يدعم تشغيل الموسيقى.
+</audio>
+
     <div class="header">
         <h1>المكتبة الجامعية</h1>
         <h2>.</h2>
@@ -264,6 +288,42 @@
         }
 
         displayEquations();
+
+function displayEquations() {
+    const equationContainer = document.getElementById('equationContainer');
+    const equationElement = document.createElement('div');
+    equationElement.className = 'equation';
+    equationContainer.appendChild(equationElement);
+
+    setInterval(() => {
+        equationElement.textContent = equations[index];
+        equationElement.style.left = Math.random() * window.innerWidth + 'px';
+        equationElement.style.top = Math.random() * window.innerHeight + 'px';
+        equationElement.style.opacity = 1;
+
+        setTimeout(() => {
+            equationElement.style.opacity = 0;
+        }, 1000);
+
+        index = (index + 1) % equations.length;
+    }, 2000);
+}
+
+displayEquations();
+
+// دالة تشغيل/إيقاف الموسيقى
+function toggleMusic() {
+    const music = document.getElementById("backgroundMusic");
+    const musicButton = document.querySelector(".music-button");
+
+    if (music.paused) {
+        music.play();
+        musicButton.textContent = "🔇"; // تغيير الأيقونة إلى مكبر صوت مغلق
+    } else {
+        music.pause();
+        musicButton.textContent = "🔊"; // إعادة الأيقونة إلى مكبر صوت مفتوح
+    }
+}
     </script>
 </body>
 </html>
