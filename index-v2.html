@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>مكتبة كلية العلوم القانونية والاقتصادية</title>
+    <style>
+        /* إعدادات عامة للصفحة */
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            color: #ffffff;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            overflow: hidden;
+            position: relative;
+            background: #3D4D55;
+        }
+
+        /* ظل الأزرار */
+        .button {
+            background-color: #2B124C;
+            color: #fff;
+            padding: 15px;
+            margin: 10px 0;
+            border: none;
+            border-radius: 8px;
+            width: 80%;
+            max-width: 250px;
+            font-size: 16px;
+            cursor: pointer;
+            text-align: center;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            transition: background-color 0.3s, transform 0.3s;
+        }
+
+        .button:hover {
+            background-color: #20212B;
+            transform: scale(1.05);
+        }
+
+        /* إعدادات الشريط الجانبي */
+        .sidebar {
+            position: fixed;
+            top: 0;
+            right: -300px;
+            width: 250px;
+            height: 100%;
+            background-color: rgba(75, 0, 130, 0.9);
+            color: #fff;
+            padding: 20px;
+            transition: right 0.3s ease;
+            z-index: 1000;
+        }
+
+        .sidebar.open {
+            right: 0;
+        }
+
+        .menu-icon {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            font-size: 30px;
+            color: #fff;
+            cursor: pointer;
+            z-index: 1001;
+        }
+
+        /* إعداد رأس الصفحة */
+        .header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .header h1 {
+            font-size: 45px;
+            color: #E4E6D9;
+        }
+
+        /* إعدادات الموسيقى */
+        .music-player {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 1001;
+            cursor: pointer;
+            background-color: rgba(0, 0, 0, 0.7);
+            color: #fff;
+            padding: 10px;
+            border-radius: 50%;
+        }
+
+        /* إعداد الرسائل */
+        .message {
+            font-size: 16px;
+            color: #FFDF91;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <!-- زر الشريط الجانبي -->
+    <div class="menu-icon" onclick="toggleSidebar()">☰</div>
+    
+    <!-- الشريط الجانبي -->
+    <div class="sidebar" id="sidebar">
+        <h2>Réglages - الاعدادات ⚙️</h2>
+        <div class="language-switch" onclick="toggleLanguage()">Changer la langue - تغيير اللغة</div>
+    </div>
+
+    <!-- مشغل الموسيقى -->
+    <div class="music-player" onclick="toggleMusic()">🎵</div>
+    <audio id="backgroundMusic" loop>
+        <source src="music.mp3" type="audio/mp3">
+    </audio>
+
+    <!-- العنوان -->
+    <div class="header">
+        <h1>المكتبة الجامعية</h1>
+        <p class="message">${isArabic ? "اختر أحد الأقسام للانتقال إلى الكتب المتاحة" : "Choisissez une section pour accéder aux livres disponibles"}</p>
+    </div>
+
+    <!-- الأزرار الرئيسية -->
+    <button class="button" onclick="openSection('main')">كتب كلية العلوم القانونية والاقتصادية</button>
+    <button class="button" onclick="openSection('social')">كتب المدرسة العليا لعلوم الصحة</button>
+
+    <div id="content"></div>
+
+    <script>
+        let isArabic = true;
+
+        // تفعيل الشريط الجانبي
+        function toggleSidebar() {
+            document.getElementById('sidebar').classList.toggle('open');
+        }
+
+        // تبديل اللغة
+        function toggleLanguage() {
+            isArabic = !isArabic;
+            document.documentElement.lang = isArabic ? "ar" : "fr";
+            document.dir = isArabic ? "rtl" : "ltr";
+            document.querySelector(".language-switch").textContent = isArabic ? "Changer la langue vers le français" : "تغيير اللغة للعربية";
+            document.querySelector("h1").textContent = isArabic ? "المكتبة الجامعية" : "Bibliothèque Universitaire";
+        }
+
+        // دالة لتشغيل الموسيقى وإيقافها
+        function toggleMusic() {
+            const music = document.getElementById("backgroundMusic");
+            if (music.paused) {
+                music.play();
+            } else {
+                music.pause();
+            }
+        }
+
+        // فتح الأقسام والتخصصات
+        function openSection(section) {
+            document.getElementById('content').innerHTML = `
+                <div class="header">
+                    <button class="button back-button" onclick="location.reload()">العودة للصفحة الرئيسية - Retour</button>
+                    <h2>${isArabic ? "اختر أحد المستويات للانتقال الى المراجع المطلوبة" : "Sélectionnez un niveau pour accéder aux références demandées"}</h2>
+                </div>
+                <button class="button" onclick="openSpecialty('banque')">${isArabic ? "البنوك والتأمين" : "Banques et Assurance"}</button>
+                <button class="button" onclick="openSpecialty('droit')">${isArabic ? "القانون" : "Droit"}</button>
+                <button class="button" onclick="openSpecialty('hr')">${isArabic ? "تسيير الموارد البشرية" : "Gestion des Ressources Humaines"}</button>
+            `;
+        }
+
+        // فتح المستويات
+        function openSpecialty(specialty) {
+            document.getElementById('content').innerHTML = `
+                <div class="header">
+                    <button class="button back-button" onclick="openSection('main')">${isArabic ? "الرجوع" : "Retour"}</button>
+                    <h2>${isArabic ? "اختر الفصل" : "Choisissez un semestre"}</h2>
+                </div>
+                <button class="button" onclick="openSemester('${specialty}', 'L1', 'S1')">S1</button>
+                <button class="button" onclick="openSemester('${specialty}', 'L1', 'S2')">S2</button>
+            `;
+        }
+
+        // دالة الروابط المتاحة أو رسالة عند عدم التوفر
+        function openSemester(specialty, level, semester) {
+            let link = '';
+            if (specialty === 'banque' && level === 'L1') {
+                link = (semester === 'S1') ? 'https://drive.google.com/file/d/11Sw_bj_-pfed6vr1MbqKRCHqJ8PuHuMy' : 'https://drive.google.com/file/d/11UnEcR8G4T0qdPrckuAB5MYCPLO1OxeN';
+            } else if (specialty === 'droit' && level === 'L1') {
+                link = (semester === 'S1') ? 'https://drive.google.com/drive/folders/120zSK4tz_sZvWSpwnz9g8IcAlY4_Q6zq' : 'https://drive.google.com/drive/folders/126B6zWPAM8XUf1bKSnPaH8MB271u9vTy';
+            } else if (specialty === 'hr' && level === 'L1') {
+                link = (semester === 'S1') ? 'https://drive.google.com/drive/folders/10NJpI8V6F8bRA4CY99mOrfnt5SNor3BK' : 'https://drive.google.com/drive/folders/10NwquRY-Akh9Iyss8W3ve1wHqL7CqJ0B';
+            }
+
+            if (link) {
+                document.getElementById('content').innerHTML = `
+                    <div class="header">
+                        <button class="button back-button" onclick="openSpecialty('${specialty}')">${isArabic ? "الرجوع" : "Retour"}</button>
+                        <h2>${isArabic ? "تحميل الكتب" : "Télécharger les livres"}</h2>
+                    </div>
+                    <a class="button" href="${link}" target="_blank">${isArabic ? "تحميل الكتب" : "Télécharger les livres"}</a>
+                `;
+            } else {
+                alert(isArabic ? "لم يتم رفع الكتب بعد لهذا الفصل" : "Les livres ne sont pas disponibles pour ce semestre");
+            }
+        }
+    </script>
+</body>
+</html>
