@@ -165,6 +165,46 @@ body {
     from { width: 0; }
     to { width: 100%; }
 }
+
+   /* موقع زر الموسيقى */ 
+
+          .music-button {
+              position: fixed;
+              top:26px;
+              right :20px;
+              z-index: 500;
+              font-size:19px;
+              background:#1a1a3d;
+              border-radius: 50%;
+              box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+                  }
+/* تصميم زر الرجوع */
+.back-button {
+    position: absolute; /* جعل الزر قابل للتحريك باستخدام الإحداثيات */
+    top: 20px; /* تحديد المسافة من الأعلى (يمكن تغييره حسب الحاجة) */
+    right: 20px; /* تحديد المسافة من اليسار (يمكن تغييره حسب الحاجة) */
+    padding: 10px 20px; /* تحديد حجم الزر (الطول والعرض) */
+    font-size: 10px; /* تحديد حجم الخط داخل الزر */
+    background-color: #808080; /* لون خلفية الزر */
+    color: white; /* لون النص داخل الزر */
+    border: none; /* إزالة الحدود حول الزر */
+    border-radius: 30px; /* تحديد زوايا دائرية للزر */
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2); /* إضافة ظل خفيف للزر */
+    cursor: pointer; /* تغيير المؤشر عند المرور فوق الزر */
+    transition: background-color 0.3s, transform 0.3s; /* تأثيرات الانتقال عند التفاعل مع الزر */
+    z-index:500; /* التأكد من أن الزر يظهر فوق العناصر الأخرى */
+}
+
+/* تغيير اللون عند مرور المؤشر فوق الزر */
+.back-button:hover {
+    background-color: #6A0DAD;; /* تغيير اللون إلى الأزرق الداكن عند مرور الماوس */
+    transform: scale(1.05); /* تكبير الزر قليلاً عند مرور الماوس */
+}
+
+/* تأثير الضغط على الزر */
+.back-button:active {
+    transform: scale(0.98); /* تصغير الزر قليلاً عند الضغط عليه */
+}
     </style>
 </head>
 <body>
@@ -275,17 +315,33 @@ body {
             `;
         }
 
-        function openSemester(specialty, level, semester) {
-            let link = '';
-            // الروابط
-            if (specialty === 'الاقتصاد والتسيير') {
-                link = (level === 'L1' && semester === 'S1') ? 'https://drive.google.com/drive/folders/152wHcD4O5bJd1aDmtD0u6HKLzKK1YxPV' : '';
-                link = (level === 'L1' && semester === 'S2') ? 'https://drive.google.com/drive/folders/1-ffPR2kL9fEBsC_C184t3lWRRS8sPenf' : link;
-            } else if (specialty === 'المالية والمحاسبة') {
-                link = (level === 'L1' && semester === 'S1') ? 'https://drive.google.com/drive/folders/10uXNSqA0jH3QrXAtlxMq-vuMmwrSZEg0' : '';
-                link = (level === 'L1' && semester === 'S2') ? 'https://drive.google.com/drive/folders/10uz7mFXte1orakUTov6aWI1zWpo0ltGd' : link;
-            } // إضافة الروابط الأخرى هنا
-
+  function openSemester(specialty, level, semester) {
+    let link = '';
+    // الروابط القديمة
+    if (specialty === 'الاقتصاد والتسيير') {
+        link = (level === 'L1' && semester === 'S1') ? 'https://drive.google.com/drive/folders/152wHcD4O5bJd1aDmtD0u6HKLzKK1YxPV' : '';
+        link = (level === 'L1' && semester === 'S2') ? 'https://drive.google.com/drive/folders/1-ffPR2kL9fEBsC_C184t3lWRRS8sPenf' : link;
+    } else if (specialty === 'المالية والمحاسبة') {
+        link = (level === 'L1' && semester === 'S1') ? 'https://drive.google.com/drive/folders/10uXNSqA0jH3QrXAtlxMq-vuMmwrSZEg0' : '';
+        link = (level === 'L1' && semester === 'S2') ? 'https://drive.google.com/drive/folders/10uz7mFXte1orakUTov6aWI1zWpo0ltGd' : link;
+    }
+    // الروابط الجديدة
+    else if (specialty === 'القانون') {
+        if (level === 'L1') {
+            link = (semester === 'S1') ? 'https://drive.google.com/file/d/120zSK4tz_sZvWSpwnz9g8IcAlY4_Q6zq' : link;
+            link = (semester === 'S2') ? 'https://drive.google.com/file/d/126B6zWPAM8XUf1bKSnPaH8MB271u9vTy' : link;
+        }
+    } else if (specialty === 'البنوك والتأمين') {
+        if (level === 'L1') {
+            link = (semester === 'S1') ? 'https://drive.google.com/file/d/11Sw_bj_-pfed6vr1MbqKRCHqJ8PuHuMy' : link;
+            link = (semester === 'S2') ? 'https://drive.google.com/file/d/11UnEcR8G4T0qdPrckuAB5MYCPLO1OxeN' : link;
+        }
+    } else if (specialty === 'تسيير الموارد البشرية') {
+        if (level === 'L1') {
+            link = (semester === 'S1') ? 'https://drive.google.com/drive/folders/10NJpI8V6F8bRA4CY99mOrfnt5SNor3BK' : link;
+            link = (semester === 'S2') ? 'https://drive.google.com/drive/folders/10NwquRY-Akh9Iyss8W3ve1wHqL7CqJ0B' : link;
+        }
+    }
             document.body.innerHTML = `
                 <div class="header">
                     <button class="back-button button" onclick="openLevel('${specialty}', '${level}')">${isArabic ? "الرجوع" : "Retour"}</button>
