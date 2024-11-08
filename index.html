@@ -221,14 +221,14 @@ body {
         <div class="language-switch" onclick="toggleLanguage()">Changer la langue - تغيير اللغة</div>
     </div>
    <!-- المحتوى الخاص بالصفحة -->
-    <button class="music-button" onclick="toggleMusic()">🎵.</button>
+    <button class="music-button" onclick="toggleMusic()">🎵</button>
     <audio id="backgroundMusic" loop>
         <source src="music.mp3" type="audio/mpeg">
         المتصفح الخاص بك لا يدعم تشغيل الموسيقى.
 </audio>
 
     <div class="header">
-<h1 id="typingEffect">-  المكتبة الجامعية    - </h1>
+<h1 id="typingEffect">-  الــمــكــتـبــة الــجــامــعــيــة     </h1>
         <h2></h2>
         <h3></h3>
         <h4></h4>
@@ -237,8 +237,10 @@ body {
         <h7></h7>
     </div>
     <button class="button" onclick="openSection('main')">كتب كلية العلوم القانونية والاقتصادية</button>
-    <button class="button" onclick="openSection('!!!')">كتب المدرسة العليا لعلوم الصحة</button>
-    <div>نافذة قيد الانشاء...</div>
+    <button class="button" onclick="openSection('!!!')">⏳</button>
+    <button class="button" onclick="openSection('!!!')">⏳</button>
+    <button class="button" onclick="openSection('!!!')">⏳</button>
+    
 
     <div class="header">
         <h8></h8>
@@ -266,7 +268,7 @@ body {
             document.documentElement.lang = isArabic ? "ar" : "fr";
             document.dir = isArabic ? "rtl" : "ltr";
             document.querySelector(".language-switch").textContent = isArabic ? "Changer la langue vers le français" : "تغيير اللغة للعربية";
-            document.querySelector("h1").textContent = isArabic ? "المكتبة الجامعية" : "Bibliothèque Universitaire";
+            document.querySelector("h1").textContent = isArabic ? "الـــمـــكـــتـــبــــة الـــجـــامـــعـــيــة" : "Bibliothèque Universitaire";
             document.querySelector(".button").textContent = isArabic ? "كلية العلوم القانونية والاقتصادية" : "Faculté de Droit et d'Économie";
         }
 
