@@ -88,26 +88,6 @@
             text-align: center;
             color: #ffffff;
         }
-
-        .language-select select {
-            padding: 8px;
-            font-size: 1rem;
-            border: 1px solid #6A0DAD;
-            border-radius: 5px;
-            background-color: #696969;
-            color: #ffffff;
-            cursor: pointer;
-            outline: none;
-            transition: all 0.3s ease;
-        }
-
-        .language-select select:hover {
-            background-color: #6A0DAD;
-        }
-
-        .language-select select:focus {
-            box-shadow: 0 0 10px rgba(106, 13, 173, 0.5);
-        }
     </style>
 </head>
 <body>
@@ -128,72 +108,101 @@
     <div id="result" class="result"></div>
 
     <script>
-       // تعيين مجموعات البيانات حسب التخصص
         const groupsData = {
             Economics: [
-                { min: 'B034810', max: 'B035033', group: 9 },
-                // أضف بيانات إضافية هنا
+                { min: 'B034810', max: 'B035033', group: 1 }
+                
             ],
             Law: [
-                { min: 'C034810', max: 'C035033', group: 5 },
-                // أضف بيانات إضافية هنا
+                { min: 'C034810', max: 'C035033', group: 5 }
             ],
             FinanceAndAccounting: [
-        { min: 'B016654', max: 'B030044', group: 1 },
-        { min: 'B030112', max: 'B031803', group: 2 },
-        { min: 'B031817', max: 'B032796', group: 3 },
-        { min: 'B032801', max: 'B033435', group: 4 },
-        { min: 'B033467', max: 'B033816', group: 5 },
-        { min: 'B033821', max: 'B034425', group: 6 },
-        { min: 'B034470', max: 'B034912', group: 7 },
-        { min: 'B034917', max: 'B035520', group: 8 },
-        { min: 'B035523', max: 'B035915', group: 9 },
-        { min: 'B035916', max: 'B036389', group: 10 },
-        { min: 'B036395', max: 'B036566', group: 11 },
-        { min: 'B036571', max: 'B036764', group: 12 },
-        { min: 'B036765', max: 'B037905', group: 13 },
-        { min: 'B037906', max: 'B038329', group: 14 },
-        { min: 'B038330', max: 'B039132', group: 15 },
-        { min: 'B039144', max: 'B039452', group: 16 }
-    ]
-};
-                // أضف بيانات إضافية هنا
+                { min: 'B016654', max: 'B030044', group: 1 },
+                { min: 'B030112', max: 'B031803', group: 2 },
+                { min: 'B031817', max: 'B032796', group: 3 },
+                { min: 'B032801', max: 'B033435', group: 4 },
+                { min: 'B033467', max: 'B033816', group: 5 },
+                { min: 'B033821', max: 'B034425', group: 6 },
+                { min: 'B034470', max: 'B034912', group: 7 },
+                { min: 'B034917', max: 'B035520', group: 8 },
+                { min: 'B035523', max: 'B035915', group: 9 },
+                { min: 'B035916', max: 'B036389', group: 10 },
+                { min: 'B036395', max: 'B036566', group: 11 },
+                { min: 'B036571', max: 'B036764', group: 12 },
+                { min: 'B036765', max: 'B037905', group: 13 },
+                { min: 'B037906', max: 'B038329', group: 14 },
+                { min: 'B038330', max: 'B039132', group: 15 },
+                { min: 'B039144', max: 'B039452', group: 16 }
             ],
             BankingAndInsurance: [
-                { min: 'E034810', max: 'E035033', group: 7 },
-                // أضف بيانات إضافية هنا
+                { min: 'B020921', max: 'B030402', group: 1 },
+        { min: 'B030442', max: 'B032732', group: 2 },
+        { min: 'B032768', max: 'B033824', group: 3 },
+        { min: 'B033837', max: 'B034730', group: 4 },
+        { min: 'B034737', max: 'B035166', group: 5 },
+        { min: 'B035171', max: 'B035775', group: 6 },
+        { min: 'B035778', max: 'B035958', group: 7 },
+        { min: 'B035998', max: 'B036446', group: 8 },
+        { min: 'B036451', max: 'B036607', group: 9 },
+        { min: 'B036608', max: 'B036729', group: 10 },
+        { min: 'B036735', max: 'B037199', group: 11 },
+        { min: 'B037215', max: 'B038066', group: 12 },
+        { min: 'B038077', max: 'B038398', group: 13 },
+        { min: 'B038399', max: 'B039162', group: 14 },
+        { min: 'B039163', max: 'B039446', group: 15 }
             ],
             HumanResourceManagement: [
-                { min: 'F034810', max: 'F035033', group: 2 },
-                // أضف بيانات إضافية هنا
+                { min: 'B024505', max: 'B032601', group: 1 },
+        { min: 'B032605', max: 'B034532', group: 2 },
+        { min: 'B034542', max: 'B034803', group: 3 },
+        { min: 'B034805', max: 'B035165', group: 4 },
+        { min: 'B035167', max: 'B035697', group: 5 },
+        { min: 'B035700', max: 'B035988', group: 6 },
+        { min: 'B035998', max: 'B036422', group: 7 },
+        { min: 'B036429', max: 'B036569', group: 8 },
+        { min: 'B036576', max: 'B036758', group: 9 },
+        { min: 'B036772', max: 'B037375', group: 10 },
+        { min: 'B037403', max: 'B038164', group: 11 },
+        { min: 'B038170', max: 'B038960', group: 12 },
+        { min: 'B038972', max: 'B039335', group: 13 },
+        { min: 'B039377', max: 'B039445', group: 14 }
             ]
         };
 
-        // التعرف على التخصص المختار من عنوان URL
-        const urlParams = new URLSearchParams(window.location.search);
-        const specialization = urlParams.get('specialization');
-        const groups = groupsData[specialization] || [];
+        const texts = {
+            ar: {
+                title: "ابحث عن مجموعتك",
+                placeholder: "أدخل رقمك التعريفي"
+            },
+            fr: {
+                title: "Recherchez votre groupe",
+                placeholder: "Entrez votre numéro d'identification"
+            }
+        };
+
+        function changeLanguage() {
+            const lang = document.getElementById("language").value;
+            document.getElementById("title").textContent = texts[lang].title;
+            document.getElementById("studentID").placeholder = texts[lang].placeholder;
+        }
 
         function searchGroup() {
-            const studentID = document.getElementById("studentID").value.trim().toUpperCase();
-            const result = document.getElementById("result");
+            const specialization = new URLSearchParams(window.location.search).get("specialization");
+            const studentID = document.getElementById("studentID").value;
+            const groupData = groupsData[specialization];
 
-            if (!studentID) {
-                result.textContent = "الرجاء إدخال رقمك التعريفي";
-                return;
-            }
+            let foundGroup = "لم يتم العثور على المجموعة";
 
-            let foundGroup = null;
-            for (const group of groups) {
-                if (studentID >= group.min && studentID <= group.max) {
-                    foundGroup = group.group;
-                    break;
+            if (groupData) {
+                for (const entry of groupData) {
+                    if (studentID >= entry.min && studentID <= entry.max) {
+                        foundGroup = `Group TD N°: ${entry.group}`;
+                        break;
+                    }
                 }
             }
 
-            result.textContent = foundGroup
-                ? `Groupe TD N° ${foundGroup}`
-                : "عذراً، لم يتم العثور على مجموعة مطابقة لهذا الرقم";
+            document.getElementById("result").textContent = foundGroup;
         }
     </script>
 </body>
