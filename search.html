@@ -48,6 +48,11 @@
             width: 250px;
         }
 
+        input:focus {
+            border-color: #6ab7ff;
+            box-shadow: 0 0 10px rgba(106, 183, 255, 0.6);
+        }
+
         button {
             padding: 12px 20px;
             font-size: 1rem;
@@ -56,6 +61,19 @@
             background-color: #4A148C;
             color: #fff;
             cursor: pointer;
+            box-shadow: 0 8px 15px rgba(66, 165, 245, 0.4);
+        }
+
+        button:hover {
+            background-color: #6A0DAD;
+            box-shadow: 0 12px 20px rgba(30, 136, 229, 0.3);
+            transform: translateY(-3px);
+        }
+
+        button:active {
+            background-color: #1565c0;
+            box-shadow: 0 4px 8px rgba(21, 101, 192, 0.3);
+            transform: translateY(2px);
         }
 
         .result {
@@ -89,8 +107,106 @@
 
     <div id="result" class="result"></div>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.10.377/pdf.min.js"></script>
     <script>
+        const groupsData = {
+            Economics: [
+                { min: 'B034810', max: 'B035033', group: 1 }
+                
+            ],
+            Law: [
+    { min: 'B024577', max: 'B028944', group: 1 },
+    { min: 'B028963', max: 'B030267', group: 2 },
+    { min: 'B030272', max: 'B031072', group: 3 },
+    { min: 'B031080', max: 'B031188', group: 4 },
+    { min: 'B031190', max: 'B031397', group: 5 },
+    { min: 'B031400', max: 'B031649', group: 6 },
+    { min: 'B031652', max: 'B031869', group: 7 },
+    { min: 'B031873', max: 'B032155', group: 8 },
+    { min: 'B032169', max: 'B032320', group: 9 },
+    { min: 'B032329', max: 'B032499', group: 10 },
+    { min: 'B032504', max: 'B032744', group: 11 },
+    { min: 'B032758', max: 'B033007', group: 12 },
+    { min: 'B033010', max: 'B033209', group: 13 },
+    { min: 'B033219', max: 'B033525', group: 14 },
+    { min: 'B033544', max: 'B033798', group: 15 },
+    { min: 'B033801' ,max: 'B034424', group :16 },
+    { min: 'B034426' ,max: 'B034534', group :17 },         
+    { min: 'B034724', max: 'B034867', group: 19 },
+    { min: 'B034535' ,max: 'B034718', group :18 },
+    { min: 'B035007' ,max: 'B035077', group :21 },
+    { min: 'B034869' ,max: 'B035003', group :20 },
+    { min: 'B035203' ,max: 'B035299', group :23 },
+    { min: 'B035080' ,max: 'B035201', group :22 },
+    { min: 'B035412' ,max: 'B035505', group :25 },
+    { min: 'B035307' ,max: 'B035411', group :24 },
+    { min: 'B035662' ,max: 'B035771', group :27 },
+    { min: 'B035512' ,max: 'B035661', group :26 },
+    { min: 'B036044' ,max: 'B036129', group :29 },
+    { min: 'B035797' ,max: 'B036043', group :28 },
+    { min: 'B036274' ,max: 'B036791', group :31 },
+    { min: 'B036133' ,max: 'B036263', group :30 },
+    { min: 'B037037' ,max: 'B037113', group :34 },
+    { min: 'B037115' ,max: 'B037179', group :35 },
+    { min: 'B036796' ,max: 'B036953', group :32 },
+    { min: 'B036954' ,max: 'B037036', group :33 },
+    { min: 'B037347' ,max: 'B037457', group :38 },
+    { min: 'B037460' ,max: 'B037548', group :39 },
+    { min: 'B037185' ,max: 'B037244', group :36 },
+    { min: 'B037247' ,max: 'B037330', group :37 }
+                        ],
+            FinanceAndAccounting: [
+                { min: 'B016654', max: 'B030044', group: 1 },
+                { min: 'B030112', max: 'B031803', group: 2 },
+                { min: 'B031817', max: 'B032796', group: 3 },
+                { min: 'B032801', max: 'B033435', group: 4 },
+                { min: 'B033467', max: 'B033816', group: 5 },
+                { min: 'B033821', max: 'B034425', group: 6 },
+                { min: 'B034470', max: 'B034912', group: 7 },
+                { min: 'B034917', max: 'B035520', group: 8 },
+                { min: 'B035523', max: 'B035915', group: 9 },
+                { min: 'B035916', max: 'B036389', group: 10 },
+                { min: 'B036395', max: 'B036566', group: 11 },
+                { min: 'B036571', max: 'B036764', group: 12 },
+                { min: 'B036765', max: 'B037905', group: 13 },
+                { min: 'B037906', max: 'B038329', group: 14 },
+                { min: 'B038330', max: 'B039132', group: 15 },
+                { min: 'B039144', max: 'B039452', group: 16 }
+            ],
+            BankingAndInsurance: [
+                { min: 'B020921', max: 'B030402', group: 1 },
+        { min: 'B030442', max: 'B032732', group: 2 },
+        { min: 'B032768', max: 'B033824', group: 3 },
+        { min: 'B033837', max: 'B034730', group: 4 },
+        { min: 'B034737', max: 'B035166', group: 5 },
+        { min: 'B035171', max: 'B035775', group: 6 },
+        { min: 'B035778', max: 'B035958', group: 7 },
+        { min: 'B035998', max: 'B036446', group: 8 },
+        { min: 'B036451', max: 'B036607', group: 9 },
+        { min: 'B036608', max: 'B036729', group: 10 },
+        { min: 'B036735', max: 'B037199', group: 11 },
+        { min: 'B037215', max: 'B038066', group: 12 },
+        { min: 'B038077', max: 'B038398', group: 13 },
+        { min: 'B038399', max: 'B039162', group: 14 },
+        { min: 'B039163', max: 'B039446', group: 15 }
+            ],
+            HumanResourceManagement: [
+                { min: 'B024505', max: 'B032601', group: 1 },
+        { min: 'B032605', max: 'B034532', group: 2 },
+        { min: 'B034542', max: 'B034803', group: 3 },
+        { min: 'B034805', max: 'B035165', group: 4 },
+        { min: 'B035167', max: 'B035697', group: 5 },
+        { min: 'B035700', max: 'B035988', group: 6 },
+        { min: 'B035998', max: 'B036422', group: 7 },
+        { min: 'B036429', max: 'B036569', group: 8 },
+        { min: 'B036576', max: 'B036758', group: 9 },
+        { min: 'B036772', max: 'B037375', group: 10 },
+        { min: 'B037403', max: 'B038164', group: 11 },
+        { min: 'B038170', max: 'B038960', group: 12 },
+        { min: 'B038972', max: 'B039335', group: 13 },
+        { min: 'B039377', max: 'B039445', group: 14 }
+            ]
+        };
+
         const texts = {
             ar: {
                 title: "ابحث عن مجموعتك",
@@ -108,44 +224,19 @@
             document.getElementById("studentID").placeholder = texts[lang].placeholder;
         }
 
-        const cacheData = {};
-
-        async function loadPDFData(specialization) {
-            if (cacheData[specialization]) return cacheData[specialization];
-            const pdfPath = `${specialization}.pdf`;
-            const pdf = await pdfjsLib.getDocument(pdfPath).promise;
-            let groupData = [];
-
-            for (let i = 1; i <= pdf.numPages; i++) {
-                const page = await pdf.getPage(i);
-                const textContent = await page.getTextContent();
-                const textItems = textContent.items.map(item => item.str.trim());
-
-                for (let j = 0; j < textItems.length; j++) {
-                    if (!isNaN(textItems[j]) && textItems[j + 1].startsWith("B03") && textItems[j + 2].startsWith("B03")) {
-                        groupData.push({
-                            group: parseInt(textItems[j], 10),
-                            min: textItems[j + 1],
-                            max: textItems[j + 2]
-                        });
-                    }
-                }
-            }
-
-            cacheData[specialization] = groupData;
-            return groupData;
-        }
-
-        async function searchGroup() {
+        function searchGroup() {
             const specialization = new URLSearchParams(window.location.search).get("specialization");
-            const studentID = document.getElementById("studentID").value.trim();
-            const groupData = await loadPDFData(specialization);
+            const studentID = document.getElementById("studentID").value;
+            const groupData = groupsData[specialization];
 
             let foundGroup = "لم يتم العثور على المجموعة";
-            for (const entry of groupData) {
-                if (studentID >= entry.min && studentID <= entry.max) {
-                    foundGroup = `Group TD N°: ${entry.group}`;
-                    break;
+
+            if (groupData) {
+                for (const entry of groupData) {
+                    if (studentID >= entry.min && studentID <= entry.max) {
+                        foundGroup = `Group TD N°: ${entry.group}`;
+                        break;
+                    }
                 }
             }
 
