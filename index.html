@@ -4,200 +4,255 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>مكتبة كلية العلوم القانونية والاقتصادية</title>
- <style>
-     /* إعدادات عامة للصفحة */
-body {
-    margin: 0;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    min-height: 100vh;
-    overflow: hidden;
-    background-color: #ffffff;
-}
+    <style>
+        /* إعدادات عامة للصفحة */
+        body {
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            overflow: hidden;
+            background-color: #000;
+        }
 
-/* طبقة النقاط */
-.dots-container {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    overflow: hidden;
-    z-index: 0; 
-/* جعل النقاط في الخلف */
-}
+        /* طبقة النقاط */
+        .dots-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: 0;
+        }
 
-.dot {
-    position: absolute;
-    width: 10px;
-    height: 600px;
-    background-color: #808080;
-    border-radius: 50%;
-    animation: move 2s infinite alternate;
-    opacity: 0.5;
-}
+        .dot {
+            position: absolute;
+            width: 10px;
+            height: 600px;
+            background-color: #808080;
+            border-radius: 50%;
+            animation: move 2s infinite alternate;
+            opacity: 0.5;
+        }
 
-/* إعدادات حركة النقاط */
-@keyframes move {
-    0% { transform: translateY(0); }
-    100% { transform: translateY(20px); }
-}
+        @keyframes move {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(20px); }
+        }
 
-/* طبقة الأزرار */
-.button-container {
-    position: relative;
-    z-index: 10; 
-/* جعل الأزرار في المقدمة */
-}
+        /* طبقة الأزرار */
+        .button-container {
+            position: relative;
+            z-index: 10;
+        }
 
-.button {
-    background-color: #0056b3;
-    color: #fff;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 16px;
-    margin: 10px;
-    transition: background-color 0.3s;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
-    z-index: 500;
-}
+        .button {
+            position: relative;
+            background: linear-gradient(45deg, #6a11cb, #2575fc);
+            color: #fff;
+            padding: 15px 30px;
+            margin: 15px 0;
+            border: none;
+            border-radius: 30px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            width: 100%;
+            max-width: 280px;
+            text-align: center;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
 
-.button:hover {
-    background-color: #004494;
-    transform: translateY(-2px);
-}
+        .button:hover {
+            background: linear-gradient(45deg, #2575fc, #6a11cb);
+            transform: translateY(-6px) scale(1.05);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.4);
+        }
 
-/* تصميم الشريط الجانبي */
-.sidebar {
-    position: fixed;
-    top: 0;
-    right: -300px;
-    width: 250px;
-    height: 15%;
-    background: rgba(0, 86, 179, 0.8);
-    padding: 20px;
-    transition: right 0.3s ease;
-    z-index: 1000;
-    box-shadow: -4px 0 10px rgba(0, 0, 0, 0.5);
-    border-radius: 25% 25%;
-}
+        .button:active {
+            background: linear-gradient(45deg, #6a11cb, #2575fc);
+            transform: translateY(3px) scale(1);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+        }
 
-.sidebar.open {
-    right: 0;
-}
+        .button:focus {
+            outline: none;
+            box-shadow: 0 0 0 4px rgba(37, 117, 252, 0.5);
+        }
 
-/* تصميم زر القائمة */
-.menu-icon {
-    position: absolute;
-    top: 20px;
-    left: 20px;
-    font-size: 30px;
-    color: #000000;
-    cursor: pointer;
-    z-index: 1001;
-    transition: color 0.3s;
-}
+        .button::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 300%;
+            height: 300%;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            animation: bubble-animation 2s infinite;
+            pointer-events: none;
+        }
 
-.menu-icon:hover {
-    color: #0056b3;
-}
+        @keyframes bubble-animation {
+            0% {
+                transform: translate(-50%, -50%) scale(0.1);
+                opacity: 0.5;
+            }
+            50% {
+                transform: translate(-50%, -50%) scale(1);
+                opacity: 0.2;
+            }
+            100% {
+                transform: translate(-50%, -50%) scale(0.1);
+                opacity: 0.5;
+            }
+        }
 
-/* إعدادات الأزرار */
-.button {
-    background-color: #000000;
-    color: #fff;
-    padding: 15px;
-    margin: 15px 0;
-    border: none;
-    border-radius: 10px;
-    font-size: 16px;
-    cursor: pointer;
-    width: 100%;
-    max-width: 250px;
+        /* تصميم الشريط الجانبي */
+        .sidebar {
+            position: fixed;
+            top: 0;
+            right: -300px;
+            width: 250px;
+            height: 15%;
+            background: rgba(0, 86, 179, 0.8);
+            padding: 20px;
+            transition: right 0.3s ease;
+            z-index: 1000;
+            box-shadow: -4px 0 10px rgba(0, 0, 0, 0.5);
+            border-radius: 25% 25%;
+        }
+
+        .sidebar.open {
+            right: 0;
+        }
+
+        .menu-icon {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            font-size: 30px;
+            color: #fff;
+            cursor: pointer;
+            z-index: 1001;
+            transition: color 0.3s;
+        }
+
+        .menu-icon:hover {
+            color: #0056b3;
+        }
+
+        /* تصميم العنوان */
+        .header h1 {
+            font-size: 48px;
+            color: #fff;
+            text-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
+            margin-bottom: 20px;
+        }
+
+        /* تصميم معلومات المطور */
+        .developer-info {
+            position: fixed;
+            bottom: 10px;
+            font-size: 9px;
+            color: #ffffff;
+            opacity: 0.8;
+        }
+
+        /* إعدادات اهتزاز النص */
+        #typingEffect {
+            display: inline-block;
+            font-size: 20px;
+            color: #000000;
+            white-space: nowrap;
+            overflow: hidden;
+            width: 0;
+            animation: typing 4s steps(20) infinite, shake 0.5s ease-in-out infinite;
+        }
+
+        @keyframes typing {
+            from { width: 0; }
+            to { width: 100%; }
+        }
+
+        /* موقع زر الموسيقى */
+        .music-button {
+            position: fixed;
+            top: 26px;
+            right: 20px;
+            z-index: 500;
+            font-size: 19px;
+            background: #1a1a3d;
+            border-radius: 50%;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        /* تصميم زر الرجوع */
+        .back-button {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            padding: 10px 10px;
+            font-size: 10px;
+            background-color: #000;
+            color: white;
+            border: none;
+            border-radius: 50px;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.3s;
+            z-index: 500;
+        }
+
+        .back-button:hover {
+            background-color: #fff;
+            color: #000;
+            transform: scale(1.05);
+        }
+
+        .back-button:active {
+            transform: scale(0.98);
+        }
+
+/* تصميم خاص لزر "Group TD" */
+.group-td-button {
+    background: linear-gradient(45deg, #ff7e5f, #feb47b); 
+    color: #fff; 
+    z-index:1000;
+    padding: 15px 30px; 
+    margin: 15px 0; 
+    border: none; 
+    border-radius: 30px; 
+    font-size: 18px; 
+    font-weight: bold; 
+    cursor: pointer; 
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2); 
+    transition: all 0.3s ease; 
+    width: 200px; 
     text-align: center;
-    transition: background-color 0.3s, transform 0.2s;
 }
 
-.button:hover {
-    background-color: #808080;
-    transform: translateY(-2px);
+/* تأثير التمرير على الزر */
+.group-td-button:hover {
+    background: linear-gradient(45deg, #feb47b, #ff7e5f); 
+    transform: scale(1.1); 
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3); 
 }
 
-/* تصميم العنوان */
-.header h1 {
-    font-size: 48px;
-    color: #000;
-    text-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
-    margin-bottom: 20px;
+.group-td-button:active {
+    transform: scale(0.95);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
-/* تصميم معلومات المطور */
-.developer-info {
-    position: fixed;
-    bottom: 10px;
-    font-size: 9px;
-    color: #000;
-    opacity: 0.8;
-}
-
-/* إعدادات اهتزاز النص */
-#typingEffect {
-    display: inline-block;
-    font-size: 20px;
-    color: #000000;
-    white-space: nowrap;
-    overflow: hidden;
-    width: 0;
-    animation: typing 4s steps(20) infinite, shake 0.5s ease-in-out infinite;
-}
-
-@keyframes typing {
-    from { width: 0; }
-    to { width: 100%; }
-}
-
-   /* موقع زر الموسيقى */ 
-
-          .music-button {
-              position: fixed;
-              top:26px;
-              right :20px;
-              z-index: 500;
-              font-size:19px;
-              background:#1a1a3d;
-              border-radius: 50%;
-              box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
-                  }
-/* تصميم زر الرجوع */
-.back-button {
-    position: absolute; /* جعل الزر قابل للتحريك باستخدام الإحداثيات */
-    top: 20px; /* تحديد المسافة من الأعلى (يمكن تغييره حسب الحاجة) */
-    right: 20px; /* تحديد المسافة من اليسار (يمكن تغييره حسب الحاجة) */
-    padding: 10px 20px; /* تحديد حجم الزر (الطول والعرض) */
-    font-size: 10px; /* تحديد حجم الخط داخل الزر */
-    background-color: #808080; /* لون خلفية الزر */
-    color: white; /* لون النص داخل الزر */
-    border: none; /* إزالة الحدود حول الزر */
-    border-radius: 30px; /* تحديد زوايا دائرية للزر */
-    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2); /* إضافة ظل خفيف للزر */
-    cursor: pointer; /* تغيير المؤشر عند المرور فوق الزر */
-    transition: background-color 0.3s, transform 0.3s; /* تأثيرات الانتقال عند التفاعل مع الزر */
-    z-index:500; /* التأكد من أن الزر يظهر فوق العناصر الأخرى */
-}
-
-/* تغيير اللون عند مرور المؤشر فوق الزر */
-.back-button:hover {
-    background-color: #6A0DAD;; /* تغيير اللون إلى الأزرق الداكن عند مرور الماوس */
-    transform: scale(1.05); /* تكبير الزر قليلاً عند مرور الماوس */
-}
-
-/* تأثير الضغط على الزر */
-.back-button:active {
-    transform: scale(0.98); /* تصغير الزر قليلاً عند الضغط عليه */
+.group-td-button:focus {
+    outline: none; 
+    box-shadow: 0 0 0 4px rgba(255, 126, 95, 0.5);
 }
     </style>
 </head>
@@ -229,23 +284,18 @@ body {
 
     <div class="header">
 <h1 id="typingEffect">-  الــمــكــتـبــة الــجــامــعــيــة     </h1>
-        <h2></h2>
-        <h3></h3>
-        <h4></h4>
-        <h5></h5>
-        <h6></h6>
-        <h7></h7>
+
     </div>
     <button class="button" onclick="openSection('main')">كتب كلية العلوم القانونية والاقتصادية</button>
     <button class="button" onclick="openSection('!!!')">⏳</button>
-    ‏<button onclick="window.location.href='tdf.html'">Group TD</button>
-    
+<button class="group-td-button" onclick="window.location.href='tdf.html'">Group TD</button>
+ 
     <div class="header">
-        <h8></h8>
+        <h4></h4>
     </div>
 
     <div class="developer-info">
-        ® dev: Mohamed Salem/Yacoub 
+        ' dev: Mohamed Salem/Yacoub 
     </div>
 
     <div id="equationContainer"></div>
@@ -274,7 +324,7 @@ body {
             if (section === 'main') {
                 document.body.innerHTML = `
                     <div class="header">
-                        <button class="back-button button" onclick="location.reload()">العودة للصفحة الرئيسية - Retour</button>
+                        <button class="back-button button" onclick="location.reload()"> ➔ </button>
                         <h2>${isArabic ? "كلية العلوم القانونية والاقتصادية" : "Faculté de Droit et d'Économie"}</h2>
                     </div>
                     <button class="button" onclick="openSpecialty('الاقتصاد والتسيير')">${isArabic ? "الاقتصاد والتسيير" : "Économie et Gestion"}</button>
@@ -289,7 +339,7 @@ body {
         function openSpecialty(specialty) {
             document.body.innerHTML = `
                 <div class="header">
-                    <button class="back-button button" onclick="openSection('main')">${isArabic ? "الرجوع" : "Retour"}</button>
+                    <button class="back-button button" onclick="openSection('main')">${isArabic ? "➔" : "➔"}</button>
                     <h2>${specialty}</h2>
                 </div>
                 <button class="button" onclick="openLevel('${specialty}', 'L1')">L1</button>
@@ -301,7 +351,7 @@ body {
         function openLevel(specialty, level) {
             document.body.innerHTML = `
                 <div class="header">
-                    <button class="back-button button" onclick="openSpecialty('${specialty}')">${isArabic ? "الرجوع" : "Retour"}</button>
+                    <button class="back-button button" onclick="openSpecialty('${specialty}')">${isArabic ? "➔" : "➔"}</button>
                     <h2>${specialty} - ${level}</h2>
                 </div>
                 <button class="button" onclick="openSemester('${specialty}', '${level}', 'S1')">S1</button>
@@ -338,7 +388,7 @@ body {
     }
             document.body.innerHTML = `
                 <div class="header">
-                    <button class="back-button button" onclick="openLevel('${specialty}', '${level}')">${isArabic ? "الرجوع" : "Retour"}</button>
+                    <button class="back-button button" onclick="openLevel('${specialty}', '${level}')">${isArabic ? "➔" : "➔"}</button>
                     <h2>${specialty} - ${level} - ${semester}</h2>
                 </div>
                 <a class="button" href="${link}" target="_blank">${isArabic ? "تحميل الكتب" : "Télécharger les livres"}</a>
@@ -396,38 +446,36 @@ function toggleMusic() {
 
     if (music.paused) {
         music.play();
-        musicButton.textContent = "🔊"; // تغيير الأيقونة إلى مكبر صوت مغلق
+        musicButton.textContent = "🔊"; 
     } else {
         music.pause();
-        musicButton.textContent = "🔇"; // إعادة الأيقونة إلى مكبر صوت مفتوح
+        musicButton.textContent = "🔇"; 
     }
 }
-// تكرار التأثير عند تحميل الصفحة والعودة لها
+
 document.addEventListener("DOMContentLoaded", function() {
     const textElement = document.getElementById('typingEffect');
     
-    // التأثير الحركي للكتابة حرفًا بحرف
-    textElement.style.animation = 'none'; // إيقاف التأثير أولاً
-    textElement.offsetHeight; // إعادة تحميل العنصر
-    textElement.style.animation = ''; // بدء التأثير
+    textElement.style.animation = 'none'; 
+    textElement.offsetHeight;       textElement.style.animation = ''; 
     
-    // بدء الاهتزاز الفعلي للهاتف عند الكتابة
+    
     let vibrationInterval = setInterval(() => {
         if (navigator.vibrate) {
-            // اهتزاز الهاتف لمدة 100 مللي ثانية (يمكنك تعديل المدة)
-            navigator.vibrate(100); 
+  
+          navigator.vibrate(100); 
         }
-    }, 200); // يكرر الاهتزاز كل 200 مللي ثانية
+    }, 200); 
 
-    // عند الانتهاء من الكتابة، إيقاف الاهتزاز
+   
     setTimeout(() => {
         clearInterval(vibrationInterval);
-    }, 4000); // بعد 4 ثوانٍ، يتوقف الاهتزاز (يمكنك تعديل المدة حسب رغبتك)
+    }, 4000);
     
-    // التأكد من أن التأثير يعمل مرة أخرى عند العودة للصفحة الرئيسية
+    
     window.onbeforeunload = () => {
-        textElement.style.animation = 'none'; // إيقاف التأثير قبل الخروج
-        textElement.offsetHeight; // إعادة تحميل العنصر
+        textElement.style.animation = 'none'; 
+        textElement.offsetHeight; 
     };
 });
     </script>
