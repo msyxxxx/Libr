@@ -271,7 +271,7 @@
     z-index: 999;
     cursor: pointer;
     opacity: 0; /* بدءًا، الرسالة غير مرئية */
-}
+  }
 
 .floating-message.show {
     top: 20px; /* الموضع الذي تظهر فيه الرسالة */
@@ -280,7 +280,6 @@
     </style>
 </head>
 <body>
-</div>
 <!-- الرسالة العائمة -->
     <div id="floatingMessage" class="floating-message" onclick="removeMessage()">
   اهلا ابتسام تشرفنا بزيارتك !!
@@ -501,8 +500,7 @@ document.addEventListener("DOMContentLoaded", function() {
     window.onbeforeunload = () => {
         textElement.style.animation = 'none'; 
         textElement.offsetHeight; 
-    };
-});
+    });
 ‎// وظيفة إزالة الرسالة بشكل نهائي
 function removeMessage() {
     const message = document.getElementById("floatingMessage");
