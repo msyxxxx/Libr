@@ -19,30 +19,6 @@
             transition: all 0.3s ease;
         }
 
-        /* الرسالة العائمة */
-.floating-message {
-    position: fixed;
-    top: -100px; /* بداية الرسالة خارج الشاشة */
-    left: 50%;
-    transform: translateX(-50%);
-    background-color: #fff;
-    color: #2575fc;
-    padding: 15px 25px;
-    border-radius: 30px;
-    font-size: 1.2rem;
-    font-weight: bold;
-    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
-    transition: top 0.3s ease, opacity 0.5s ease; /* إضافة تأثير التلاشي */
-    z-index: 999;
-    cursor: pointer;
-    opacity: 0; /* بدءًا، الرسالة غير مرئية */
-}
-
-.floating-message.show {
-    top: 20px; /* الموضع الذي تظهر فيه الرسالة */
-    opacity: 1; /* ظهور الرسالة */
-}
-
         h1 {
             margin-bottom: 10px;
             text-align: center;
@@ -51,49 +27,50 @@
             text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5);
         }
 
-     /* تصميم الواجهة لتكون على شكل دردشة مستطيلة مع حواف دائرية */
-.profiles {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 20px;
-    justify-content: center;
-    padding: 20px;
-}
+        /* ملفات التعريف */
+        .profiles {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: center;
+            padding: 20px;
+        }
 
-.profile-card {
-    background: rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(10px);
-    border-radius: 30px; /* حواف دائرية */
-    padding: 15px;
-    width: 250px; /* عرض الزر المستطيل */
-    text-align: center;
-    cursor: pointer;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
+        .profile-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 30px;
+            padding: 15px;
+            width: 250px;
+            text-align: center;
+            cursor: pointer;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
 
-.profile-card:hover {
-    transform: scale(1.05);
-    box-shadow: 0px 6px 15px rgba(0, 0, 0, 0.3);
-}
+        .profile-card:hover {
+            transform: scale(1.05);
+            box-shadow: 0px 6px 15px rgba(0, 0, 0, 0.3);
+        }
 
-.profile-image {
-    width: 80px; /* حجم الصورة */
-    height: 80px; /* حجم الصورة */
-    border-radius: 50%; /* حواف دائرية للصورة */
-    object-fit: cover;
-    margin-bottom: 10px;
-}
+        .profile-image {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-bottom: 10px;
+        }
 
-.profile-name {
-    font-size: 1.2rem;
-    font-weight: bold;
-    color: #fff; /* لون النص */
-}
+        .profile-name {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #fff;
+        }
 
+        /* صفحة الفيديوهات */
         .videos {
             display: none;
             flex-direction: column;
@@ -140,89 +117,90 @@
             background: #1d5bbf;
         }
 
-        .button {
-            background: #2575fc;
-            color: #fff;
-            padding: 12px 20px;
-            border: none;
-            border-radius: 5px;
+        /* الرسالة العائمة */
+        .floating-message {
+            position: fixed;
+            top: -100px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #fff;
+            color: #2575fc;
+            padding: 15px 25px;
+            border-radius: 30px;
             font-size: 1.2rem;
+            font-weight: bold;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+            z-index: 999;
+            opacity: 0;
+            transition: top 0.3s ease, opacity 0.5s ease;
             cursor: pointer;
-            transition: background 0.3s ease;
         }
 
-        .button:hover {
-            background: #1d5bbf;
+        .floating-message.show {
+            top: 20px;
+            opacity: 1;
         }
     </style>
 </head>
 <body>
 
-    <!-- الرسالة العائمة -->
-    <div id="floatingMessage" class="floating-message" onclick="removeMessage()">
-        يتم اضافة المزيد من المقاطع⏳
-    </div>
-
     <h1>مقاطع مفيدة</h1>
-    <div class="profiles" id="profiles">
-        <!-- ملفات التعريف ستكون هنا -->
-    </div>
+
+    <!-- ملفات التعريف -->
+    <div id="profiles" class="profiles"></div>
 
     <!-- صفحة الفيديوهات -->
-    <div class="videos" id="videos">
+    <div id="videos" class="videos">
         <button class="back-button" onclick="goBack()">العودة</button>
-        <div id="videoList">
-            <!-- الفيديوهات ستظهر هنا -->
-        </div>
+        <div id="videoList"></div>
     </div>
 
+    <!-- الرسالة العائمة -->
+    <div id="floatingMessage" class="floating-message" onclick="removeMessage()">يتم إضافة المزيد من المقاطع ⏳</div>
+
     <script>
-        // مصفوفة ملفات التعريف مع المسارات الخاصة بالصورة والفيديوهات
         const profiles = [
             { name: "محمد علي", folder: "profil1", image: "profil1/cover1.jpg" },
-            { name: "⏳", folder: "profil2", image: "profil2/cover2.jpg" },
-            // يمكنك إضافة المزيد من الملفات هنا
+            { name: "سارة أحمد", folder: "profil2", image: "profil2/cover2.jpg" }
         ];
 
-        // إنشاء ملفات التعريف
         const profilesContainer = document.getElementById("profiles");
         const videosContainer = document.getElementById("videos");
         const videoList = document.getElementById("videoList");
 
+        // إنشاء ملفات التعريف
         profiles.forEach(profile => {
             const card = document.createElement("div");
-            card.classList.add("profile-card");
+            card.className = "profile-card";
             card.onclick = () => loadVideos(profile);
 
-            const image = document.createElement("img");
-            image.src = profile.image;
-            image.alt = profile.name;
-            image.classList.add("profile-image");
+            const img = document.createElement("img");
+            img.src = profile.image;
+            img.alt = profile.name;
+            img.className = "profile-image";
 
             const name = document.createElement("div");
             name.textContent = profile.name;
-            name.classList.add("profile-name");
+            name.className = "profile-name";
 
-            card.appendChild(image);
+            card.appendChild(img);
             card.appendChild(name);
             profilesContainer.appendChild(card);
         });
 
-        // تحميل الفيديوهات الخاصة بالملف
+        // تحميل الفيديوهات
         function loadVideos(profile) {
             profilesContainer.style.display = "none";
             videosContainer.style.display = "flex";
             videoList.innerHTML = "";
 
-            // تحميل الفيديوهات من المجلد الخاص بالملف
-            const videoFiles = ["video1.mp4", "video2.mp4", "video3.mp4"]; // فرضية وجود الفيديوهات في المجلد
+            const videoFiles = ["video1.mp4", "video2.mp4"];
             videoFiles.forEach(file => {
-                const videoPath = `${profile.folder}/${file}`;
                 const videoCard = document.createElement("div");
-                videoCard.classList.add("video-card");
+                videoCard.className = "video-card";
 
                 const video = document.createElement("video");
-                video.src = videoPath;
+                video.src = `${profile.folder}/${file}`;
                 video.controls = true;
 
                 videoCard.appendChild(video);
@@ -230,49 +208,30 @@
             });
         }
 
-        // العودة لملفات التعريف
+        // العودة إلى ملفات التعريف
         function goBack() {
             profilesContainer.style.display = "flex";
             videosContainer.style.display = "none";
         }
 
-        // وظيفة إزالة الرسالة بشكل نهائي
-function removeMessage() {
-    const message = document.getElementById("floatingMessage");
-    message.classList.remove("show"); // إزالة الكلاس الذي يظهر الرسالة
-    setTimeout(function() {
-        message.style.display = "none"; // إخفاء العنصر بعد التلاشي
-    }, 500); // الانتظار حتى تنتهي عملية التلاشي
-}
+        // الرسالة العائمة
+        const floatingMessage = document.getElementById("floatingMessage");
 
-// عرض الرسالة العائمة
-setTimeout(function() {
-    const message = document.getElementById("floatingMessage");
-    message.style.display = "block"; // جعل الرسالة مرئية
-    setTimeout(function() {
-        message.classList.add("show"); // إضافة الكلاس لعرض الرسالة
-    }, 100); // إضافة التأخير البسيط قبل الإظهار
+        function showMessage() {
+            floatingMessage.style.display = "block";
+            setTimeout(() => floatingMessage.classList.add("show"), 100);
 
-}, 1000); // يظهر بعد ثانية واحدة
+            // إخفاء الرسالة بعد 6 ثوانٍ
+            setTimeout(removeMessage, 6000);
+        }
 
-// إخفاء الرسالة بعد 5 ثوانٍ
-setTimeout(function() {
-    removeMessage(); // إخفاء الرسالة بعد 5 ثوانٍ
-}, 6000); // تختفي بعد 5 ثوانٍ من الظهور
+        function removeMessage() {
+            floatingMessage.classList.remove("show");
+            setTimeout(() => (floatingMessage.style.display = "none"), 500);
+        }
 
-// تمديد مدة الرسالة عند الضغط المستمر
-let messageTimeout;
-const floatingMessage = document.getElementById("floatingMessage");
-
-floatingMessage.addEventListener("mousedown", function() {
-    clearTimeout(messageTimeout); // إلغاء التوقيت عند الضغط
-});
-
-floatingMessage.addEventListener("mouseup", function() {
-    messageTimeout = setTimeout(function() {
-        removeMessage(); // تمديد الإخفاء بعد 5 ثوانٍ إضافية
-    }, 6000);
-});
+        // تشغيل الرسالة العائمة
+        setTimeout(showMessage, 1000);
     </script>
 </body>
 </html>
