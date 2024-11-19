@@ -102,7 +102,7 @@
 
     <div class="input-container">
         <input type="text" id="studentID" placeholder="أدخل رقمك التعريفي">
-        <button onclick="searchGroup()">ابحث</button>
+        <button id="searchButton" onclick="searchGroup()">ابحث</button>
     </div>
 
     <div id="result" class="result"></div>
@@ -210,11 +210,13 @@
         const texts = {
             ar: {
                 title: "ابحث عن مجموعتك",
-                placeholder: "أدخل رقمك التعريفي"
+                placeholder: "أدخل رقمك التعريفي",
+                searchButton: "ابحث"
             },
             fr: {
                 title: "Recherchez votre groupe",
-                placeholder: "Entrez votre numéro d'identification"
+                placeholder: "Entrez votre numéro d'identification",
+                searchButton: "Rechercher"
             }
         };
 
@@ -222,6 +224,7 @@
             const lang = document.getElementById("language").value;
             document.getElementById("title").textContent = texts[lang].title;
             document.getElementById("studentID").placeholder = texts[lang].placeholder;
+            document.getElementById("searchButton").textContent = texts[lang].searchButton;
         }
 
         function searchGroup() {
@@ -229,12 +232,12 @@
             const studentID = document.getElementById("studentID").value;
             const groupData = groupsData[specialization];
 
-            let foundGroup = "لم يتم العثور على المجموعة";
+            let foundGroup = (document.documentElement.lang === "ar") ? "لم يتم العثور على المجموعة" : "Aucun groupe trouvé";
 
             if (groupData) {
                 for (const entry of groupData) {
                     if (studentID >= entry.min && studentID <= entry.max) {
-                        foundGroup = `Group TD N°: ${entry.group}`;
+                        foundGroup = (document.documentElement.lang === "ar") ? `TD N°: ${entry.group}` : `Groupe TD N°: ${entry.group}`;
                         break;
                     }
                 }
