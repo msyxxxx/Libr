@@ -254,10 +254,37 @@
     outline: none; 
     box-shadow: 0 0 0 4px rgba(255, 126, 95, 0.5);
 }
+/* الرسالة العائمة */
+.floating-message {
+    position: fixed;
+    top: -100px; /* بداية الرسالة خارج الشاشة */
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #00008B;
+    color: #fff;
+    padding: 15px 25px;
+    border-radius: 60px;
+    font-size: 1.2rem;
+    font-weight: bold;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+    transition: top 0.3s ease, opacity 0.5s ease; /* إضافة تأثير التلاشي */
+    z-index: 999;
+    cursor: pointer;
+    opacity: 0; /* بدءًا، الرسالة غير مرئية */
+}
+
+.floating-message.show {
+    top: 20px; /* الموضع الذي تظهر فيه الرسالة */
+    opacity: 1; /* ظهور الرسالة */
+       }
     </style>
 </head>
 <body>
 </div>
+<!-- الرسالة العائمة -->
+    <div id="floatingMessage" class="floating-message" onclick="removeMessage()">
+  اهلا ابتسام تشرفنا بزيارتك !!
+    </div>
 <!-- إضافة نقاط سوداء -->
 ‏    <div class="dot" style="top: 20%; left: 10%; animation-delay: 0s;"></div>
 ‏    <div class="dot" style="top: 25%; left: 30%; animation-delay: 0.2s;"></div>
@@ -475,6 +502,43 @@ document.addEventListener("DOMContentLoaded", function() {
         textElement.style.animation = 'none'; 
         textElement.offsetHeight; 
     };
+});
+‎// وظيفة إزالة الرسالة بشكل نهائي
+function removeMessage() {
+    const message = document.getElementById("floatingMessage");
+    message.classList.remove("show"); // إزالة الكلاس الذي يظهر الرسالة
+    setTimeout(function() {
+        message.style.display = "none"; // إخفاء العنصر بعد التلاشي
+‎    }, 500); // الانتظار حتى تنتهي عملية التلاشي
+}
+
+‎// عرض الرسالة العائمة
+setTimeout(function() {
+    const message = document.getElementById("floatingMessage");
+    message.style.display = "block"; // جعل الرسالة مرئية
+    setTimeout(function() {
+        message.classList.add("show"); // إضافة الكلاس لعرض الرسالة
+‎    }, 100); // إضافة التأخير البسيط قبل الإظهار
+
+‎}, 1000); // يظهر بعد ثانية واحدة
+
+‎// إخفاء الرسالة بعد 5 ثوانٍ
+setTimeout(function() {
+    removeMessage(); // إخفاء الرسالة بعد 5 ثوانٍ
+‎}, 6000); // تختفي بعد 5 ثوانٍ من الظهور
+
+‎// تمديد مدة الرسالة عند الضغط المستمر
+let messageTimeout;
+const floatingMessage = document.getElementById("floatingMessage");
+
+floatingMessage.addEventListener("mousedown", function() {
+    clearTimeout(messageTimeout); // إلغاء التوقيت عند الضغط
+});
+
+floatingMessage.addEventListener("mouseup", function() {
+    messageTimeout = setTimeout(function() {
+        removeMessage(); // تمديد الإخفاء بعد 5 ثوانٍ إضافية
+    }, 6000);
 });
     </script>
 </body>
