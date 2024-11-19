@@ -232,7 +232,9 @@
             const studentID = document.getElementById("studentID").value;
             const groupData = groupsData[specialization];
 
-            let foundGroup = (document.documentElement.lang === "ar") ? "لم يتم العثور على المجموعة" : "Aucun groupe trouvé";
+            let foundGroup = (document.getElementById("language").value === "ar") 
+    ? "لم يتم العثور على المجموعة" 
+    : "Aucun groupe trouvé";
 
             if (groupData) {
                 for (const entry of groupData) {
