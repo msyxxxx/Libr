@@ -13,6 +13,7 @@
             align-items: center;
             background: linear-gradient(45deg, #6a11cb, #2575fc, #ff6ec4);
             color: #fff;
+            color: #fff;
             height: 100vh;
             margin: 0;
             overflow: hidden;
@@ -58,42 +59,80 @@
     </style>
 </head>
 <body>
+<!-- قائمة تغيير اللغة -->
     <div class="language-select">
         <select id="language" onchange="changeLanguage()">
-            <option value="ar">العربية</option>
-            <option value="fr">Français</option>
-        </select>  
+            <option value="ar">Français</option>
+            <option value="fr">العربية</option>
+        </select>
     </div>
 
     <h1 id="title">اختر تخصصك</h1>
 
+    <!-- الأزرار -->
     <div class="specializations">
-        <button onclick="selectSpecialization('Economics')">الاقتصاد</button>
-        <button onclick="selectSpecialization('Law')">القانون</button>
-        <button onclick="selectSpecialization('FinanceAndAccounting')">المالية والمحاسبة</button>
-        <button onclick="selectSpecialization('BankingAndInsurance')">البنوك والتأمين</button>
-        <button onclick="selectSpecialization('HumanResourceManagement')">تسيير الموارد البشرية</button>
+        <button id="economics-btn">الاقتصاد</button>
+        <button id="law-btn">القانون</button>
+        <button id="finance-btn">المالية والمحاسبة</button>
+        <button id="banking-btn">البنوك والتأمين</button>
+        <button id="hrm-btn">تسيير الموارد البشرية</button>
     </div>
 
     <script>
         // إعداد خيارات الترجمة
         const texts = {
             ar: {
-                title: "اختر تخصصك"
+                title: "اختر تخصصك",
+                economics: "الاقتصاد",
+                law: "القانون",
+                finance: "المالية والمحاسبة",
+                banking: "البنوك والتأمين",
+                hrm: "تسيير الموارد البشرية"
             },
             fr: {
-                title: "Choisissez votre spécialité"
+                title: "Choisissez votre spécialité",
+                economics: "Économie",
+                law: "Droit",
+                finance: "Finance et Comptabilité",
+                banking: "Banque et Assurances",
+                hrm: "Gestion des ressources humaines"
             }
         };
 
+        // تغيير اللغة بناءً على اختيار المستخدم
         function changeLanguage() {
             const lang = document.getElementById("language").value;
+
+            // تحديث النصوص في الصفحة بناءً على اللغة المحددة
             document.getElementById("title").textContent = texts[lang].title;
+            document.getElementById("economics-btn").textContent = texts[lang].economics;
+            document.getElementById("law-btn").textContent = texts[lang].law;
+            document.getElementById("finance-btn").textContent = texts[lang].finance;
+            document.getElementById("banking-btn").textContent = texts[lang].banking;
+            document.getElementById("hrm-btn").textContent = texts[lang].hrm;
         }
 
+        // عند اختيار التخصص يتم التوجيه إلى صفحة البحث
         function selectSpecialization(specialization) {
             window.location.href = `search.html?specialization=${specialization}`;
         }
+
+        // إضافة الأحداث لكل زر بحيث يتم الانتقال عند الضغط عليه
+        document.getElementById("economics-btn").onclick = function() {
+            selectSpecialization("Economics");
+        };
+        document.getElementById("law-btn").onclick = function() {
+            selectSpecialization("Law");
+        };
+        document.getElementById("finance-btn").onclick = function() {
+            selectSpecialization("FinanceAndAccounting");
+        };
+        document.getElementById("banking-btn").onclick = function() {
+            selectSpecialization("BankingAndInsurance");
+        };
+        document.getElementById("hrm-btn").onclick = function() {
+            selectSpecialization("HumanResourceManagement");
+        };
     </script>
 </body>
 </html>
