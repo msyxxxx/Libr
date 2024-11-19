@@ -159,43 +159,55 @@
     <div id="floatingMessage" class="floating-message" onclick="removeMessage()">يتم إضافة المزيد من المقاطع ⏳</div>
 
     <script>
-        const profiles = [
-            { name: "محمد علي", folder: "profil1", image: "profil1/cover1.jpg" },
-            { name: "سارة أحمد", folder: "profil2", image: "profil2/cover2.jpg" }
-        ];
+    // تعريف ملفات التعريف مع فيديوهات خاصة بكل ملف
+    const profiles = [
+        {
+            name: "محمد علي",
+            folder: "profil1",
+            image: "profil1/cover1.jpg",
+            videos: ["video1.mp4", "video2.mp4", "video3.mp4"] // فيديوهات خاصة بـ محمد علي
+        },
+        {
+            name: "⏳",
+            folder: "profil2",
+            image: "profil2/cover2.jpg",
+            videos: ["video1.mp4", "video2.mp4"] // فيديوهات خاصة بـ سارة أحمد
+        }
+    ];
 
-        const profilesContainer = document.getElementById("profiles");
-        const videosContainer = document.getElementById("videos");
-        const videoList = document.getElementById("videoList");
+    const profilesContainer = document.getElementById("profiles");
+    const videosContainer = document.getElementById("videos");
+    const videoList = document.getElementById("videoList");
 
-        // إنشاء ملفات التعريف
-        profiles.forEach(profile => {
-            const card = document.createElement("div");
-            card.className = "profile-card";
-            card.onclick = () => loadVideos(profile);
+    // إنشاء ملفات التعريف
+    profiles.forEach(profile => {
+        const card = document.createElement("div");
+        card.className = "profile-card";
+        card.onclick = () => loadVideos(profile);
 
-            const img = document.createElement("img");
-            img.src = profile.image;
-            img.alt = profile.name;
-            img.className = "profile-image";
+        const img = document.createElement("img");
+        img.src = profile.image;
+        img.alt = profile.name;
+        img.className = "profile-image";
 
-            const name = document.createElement("div");
-            name.textContent = profile.name;
-            name.className = "profile-name";
+        const name = document.createElement("div");
+        name.textContent = profile.name;
+        name.className = "profile-name";
 
-            card.appendChild(img);
-            card.appendChild(name);
-            profilesContainer.appendChild(card);
-        });
+        card.appendChild(img);
+        card.appendChild(name);
+        profilesContainer.appendChild(card);
+    });
 
-        // تحميل الفيديوهات
-        function loadVideos(profile) {
-            profilesContainer.style.display = "none";
-            videosContainer.style.display = "flex";
-            videoList.innerHTML = "";
+    // تحميل الفيديوهات لملف شخصي محدد
+    function loadVideos(profile) {
+        profilesContainer.style.display = "none";
+        videosContainer.style.display = "flex";
+        videoList.innerHTML = "";
 
-            const videoFiles = ["video1.mp4", "video2.mp4"];
-            videoFiles.forEach(file => {
+        // التأكد من وجود فيديوهات للملف الشخصي
+        if (profile.videos && profile.videos.length > 0) {
+            profile.videos.forEach(file => {
                 const videoCard = document.createElement("div");
                 videoCard.className = "video-card";
 
@@ -206,32 +218,40 @@
                 videoCard.appendChild(video);
                 videoList.appendChild(videoCard);
             });
+        } else {
+            // عرض رسالة إذا لم تكن هناك فيديوهات
+            const message = document.createElement("div");
+            message.textContent = "لا توجد فيديوهات متاحة حاليا.";
+            message.style.color = "#fff";
+            message.style.fontSize = "1.2rem";
+            videoList.appendChild(message);
         }
+    }
 
-        // العودة إلى ملفات التعريف
-        function goBack() {
-            profilesContainer.style.display = "flex";
-            videosContainer.style.display = "none";
-        }
+    // العودة إلى ملفات التعريف
+    function goBack() {
+        profilesContainer.style.display = "flex";
+        videosContainer.style.display = "none";
+    }
 
-        // الرسالة العائمة
-        const floatingMessage = document.getElementById("floatingMessage");
+    // الرسالة العائمة
+    const floatingMessage = document.getElementById("floatingMessage");
 
-        function showMessage() {
-            floatingMessage.style.display = "block";
-            setTimeout(() => floatingMessage.classList.add("show"), 100);
+    function showMessage() {
+        floatingMessage.style.display = "block";
+        setTimeout(() => floatingMessage.classList.add("show"), 100);
 
-            // إخفاء الرسالة بعد 6 ثوانٍ
-            setTimeout(removeMessage, 6000);
-        }
+        // إخفاء الرسالة بعد 6 ثوانٍ
+        setTimeout(removeMessage, 6000);
+    }
 
-        function removeMessage() {
-            floatingMessage.classList.remove("show");
-            setTimeout(() => (floatingMessage.style.display = "none"), 500);
-        }
+    function removeMessage() {
+        floatingMessage.classList.remove("show");
+        setTimeout(() => (floatingMessage.style.display = "none"), 500);
+    }
 
-        // تشغيل الرسالة العائمة
-        setTimeout(showMessage, 1000);
-    </script>
+    // تشغيل الرسالة العائمة
+    setTimeout(showMessage, 1000);
+</script>
 </body>
 </html>
