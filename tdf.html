@@ -40,30 +40,37 @@
         }
 
         button {
-            padding: 12px 20px;
-            font-size: 1rem;
-            border-radius: 8px;
-            border: none;
-            background-color: #4A148C;
-            color: #fff;
-            cursor: pointer;
-            box-shadow: 0 8px 15px rgba(66, 165, 245, 0.4);
-            margin: 10px;
-        }
+    padding: 14px 28px;
+    font-size: 1rem;
+    border-radius: 30px; /* حواف دائرية أكثر وضوحاً */
+    border: none;
+    background-color: #4A148C;
+    color: #fff;
+    cursor: pointer;
+    box-shadow: 0 12px 24px rgba(66, 165, 245, 0.5), 0 6px 12px rgba(0, 0, 0, 0.15); /* ظلال قوية وعائمة */
+    margin: 10px;
+    transition: all 0.3s ease-in-out; /* إضافة انتقال سلس */
+}
 
-        button:hover {
-            background-color: #6A0DAD;
-            box-shadow: 0 12px 20px rgba(30, 136, 229, 0.3);
-            transform: translateY(-3px);
-        }
+button:hover {
+    background-color: #6A0DAD;
+    box-shadow: 0 16px 32px rgba(30, 136, 229, 0.3), 0 8px 16px rgba(0, 0, 0, 0.2); /* ظلال أكبر عند التمرير */
+    transform: translateY(-8px); /* تأثير عائم قوي عند التمرير */
+}
+
+button:active {
+    background-color: #9C27B0;
+    box-shadow: 0 8px 16px rgba(30, 136, 229, 0.2), 0 4px 8px rgba(0, 0, 0, 0.3); /* ظلال أقل عند الضغط */
+    transform: translateY(2px); /* تأثير انزلاق عند الضغط */
+}
     </style>
 </head>
 <body>
 <!-- قائمة تغيير اللغة -->
     <div class="language-select">
         <select id="language" onchange="changeLanguage()">
-            <option value="ar">Français</option>
-            <option value="fr">العربية</option>
+            <option value="ar">العربية</option>
+            <option value="fr">Français</option>
         </select>
     </div>
 
