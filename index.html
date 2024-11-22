@@ -238,6 +238,7 @@
     text-align: center;
 }
 
+
 /* تأثير التمرير على الزر */
 .group-td-button:hover {
     background: linear-gradient(45deg, #feb47b, #ff7e5f); 
@@ -251,6 +252,40 @@
 }
 
 .group-td-button:focus {
+    outline: none; 
+    box-shadow: 0 0 0 4px rgba(255, 126, 95, 0.5);
+}
+        .aitools-button {
+    background: linear-gradient(45deg, #ff7e5f, #feb47b); 
+    color: #fff; 
+    z-index:1000;
+    padding: 15px 30px; 
+    margin: 15px 0; 
+    border: none; 
+    border-radius: 30px; 
+    font-size: 18px; 
+    font-weight: bold; 
+    cursor: pointer; 
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2); 
+    transition: all 0.3s ease; 
+    width: 200px; 
+    text-align: center;
+}
+
+
+/* تأثير التمرير على الزر */
+.aitools-button:hover {
+    background: linear-gradient(45deg, #feb47b, #ff7e5f); 
+    transform: scale(1.1); 
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3); 
+}
+
+.aitools-button:active {
+    transform: scale(0.95);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.aitools-button:focus {
     outline: none; 
     box-shadow: 0 0 0 4px rgba(255, 126, 95, 0.5);
 }
@@ -290,6 +325,7 @@
     <button class="button" onclick="openSection('main')">كتب كلية العلوم القانونية والاقتصادية</button>
   <button class="button" onclick="location.href='buff.html'">مقاطع مفيدة</button>
 <button class="group-td-button" onclick="window.location.href='tdf.html'">Group TD</button>
+    <button class="aitools-button" onclick="window.location.href='aitools.js'">ادوات ذكاء اصطناعي للتعلم</button>
  
     <div class="header">
         <h4></h4>
