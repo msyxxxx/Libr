@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI Tools</title>
+  <style>
+    /* إضافة التنسيقات الأساسية هنا */
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+      background-color: #f9fafb;
+    }
+    .container {
+      max-width: 1200px;
+      margin: auto;
+    }
+    .btn {
+      background-color: #4CAF50;
+      color: white;
+      padding: 10px 20px;
+      border-radius: 5px;
+      cursor: pointer;
+      border: none;
+    }
+    .btn:hover {
+      background-color: #45a049;
+    }
+    .tools {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 20px;
+    }
+    .tool-card {
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      transition: box-shadow 0.3s ease;
+    }
+    .tool-card:hover {
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    }
+    .tool-logo {
+      background-color: #e5e5e5;
+      width: 60px;
+      height: 60px;
+      border-radius: 8px;
+    }
+    .tool-title {
+      font-size: 1.2em;
+      margin-left: 10px;
+    }
+    .tool-description {
+      margin-top: 10px;
+      color: #555;
+    }
+    .tool-link {
+      display: inline-block;
+      margin-top: 15px;
+      color: #1E3A8A;
+      text-decoration: none;
+    }
+    .tool-link:hover {
+      color: #2563EB;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- زر التبديل بين اللغات -->
+    <div class="text-right mb-4">
+      <button onclick="toggleLanguage()" class="btn" id="languageButton">Switch to Arabic</button>
+    </div>
+
+    <h1 id="title" class="text-center">AI Tools for Researchers and Students</h1>
+
+    <div class="tools" id="toolsContainer"></div>
+  </div>
+
+  <script>
+    // قائمة الأدوات
+    const tools = [
+      {
+        name: { en: 'Google Scholar', ar: 'جوجل سكولار', fr: 'Google Scholar' },
+        description: { en: 'Search for scholarly literature across many disciplines and sources.', ar: 'ابحث عن الأدبيات العلمية عبر العديد من التخصصات والمصادر.', fr: 'Recherchez de la littérature scientifique à travers de nombreuses disciplines et sources.' },
+        logo: '🔍',
+        link: 'https://scholar.google.com/'
+      },
+      {
+        name: { en: 'arXiv', ar: 'أركايف', fr: 'arXiv' },
+        description: { en: 'Open-access repository of electronic preprints in physics, mathematics, computer science, and related disciplines.', ar: 'مستودع مفتوح الوصول للنسخ الأولية الإلكترونية في الفيزياء، الرياضيات، علوم الكمبيوتر، والتخصصات ذات الصلة.', fr: 'Dépôt en accès libre de prépublications électroniques en physique, mathématiques, informatique et disciplines connexes.' },
+        logo: '📚',
+        link: 'https://arxiv.org/'
+      },
+      {
+        name: { en: 'Semantic Scholar', ar: 'Semantic Scholar', fr: 'Semantic Scholar' },
+        description: { en: 'Free academic search engine that indexes papers, authors, and publications.', ar: 'محرك بحث أكاديمي مجاني يقوم بفهرسة الأوراق البحثية، المؤلفين، والمنشورات.', fr: 'Moteur de recherche académique gratuit qui indexe les articles, auteurs et publications.' },
+        logo: '🔎',
+        link: 'https://www.semanticscholar.org/'
+      },
+      {
+        name: { en: 'Microsoft Academic', ar: 'مايكروسوفت أكاديمي', fr: 'Microsoft Academic' },
+        description: { en: 'Search engine for academic publications and authors.', ar: 'محرك بحث للأبحاث الأكاديمية والمقالات العلمية.', fr: 'Moteur de recherche pour les publications académiques et les auteurs.' },
+        logo: '💻',
+        link: 'https://academic.microsoft.com/'
+      },
+      {
+        name: { en: 'DeepL', ar: 'ديب إل', fr: 'DeepL' },
+        description: { en: 'AI-powered translation tool for researchers and students.', ar: 'أداة ترجمة مدعومة بالذكاء الاصطناعي للباحثين والطلاب.', fr: 'Outil de traduction alimenté par l\'IA pour les chercheurs et étudiants.' },
+        logo: '🌐',
+        link: 'https://www.deepl.com/'
+      },
+      {
+        name: { en: 'Grammarly', ar: 'جرامرلي', fr: 'Grammarly' },
+        description: { en: 'AI-powered writing assistant for researchers and students.', ar: 'مساعد كتابة مدعوم بالذكاء الاصطناعي للباحثين والطلاب.', fr: 'Assistant d\'écriture alimenté par l\'IA pour les chercheurs et étudiants.' },
+        logo: '✍️',
+        link: 'https://www.grammarly.com/'
+      }
+    ];
+
+    let selectedLanguage = 'en';
+
+    // تحديث النصوص حسب اللغة المختارة
+    function updateContent() {
+      document.getElementById('title').textContent = selectedLanguage === 'en' ? 'AI Tools for Researchers and Students' : selectedLanguage === 'ar' ? 'أدوات الذكاء الاصطناعي للباحثين والطلاب' : 'Outils d\'IA pour chercheurs et étudiants';
+
+      const toolsContainer = document.getElementById('toolsContainer');
+      toolsContainer.innerHTML = '';
+
+      tools.forEach(tool => {
+        const toolCard = document.createElement('div');
+        toolCard.classList.add('tool-card');
+
+        toolCard.innerHTML = `
+          <div class="flex items-center mb-4">
+            <div class="tool-logo">${tool.logo}</div>
+            <h2 class="tool-title">${tool.name[selectedLanguage]}</h2>
+          </div>
+          <p class="tool-description">${tool.description[selectedLanguage]}</p>
+          <a href="${tool.link}" target="_blank" class="tool-link">${selectedLanguage === 'en' ? 'Visit Tool' : selectedLanguage === 'ar' ? 'زيارة الأداة' : 'Visiter l\'outil'}</a>
+        `;
+        toolsContainer.appendChild(toolCard);
+      });
+    }
+
+    // التبديل بين اللغات
+    function toggleLanguage() {
+      selectedLanguage = selectedLanguage === 'en' ? 'ar' : selectedLanguage === 'ar' ? 'fr' : 'en';
+      document.getElementById('languageButton').textContent = selectedLanguage === 'en' ? 'Switch to Arabic' : selectedLanguage === 'ar' ? 'Passer au français' : 'Switch to English';
+      updateContent();
+    }
+
+    // تحميل المحتوى عند تحميل الصفحة
+    window.onload = updateContent;
+  </script>
+</body>
+</html>
