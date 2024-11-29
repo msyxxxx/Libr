@@ -1,6 +1,6 @@
 // إنشاء عنصر الرسالة الترحيبية
 const welcomeMessage = document.createElement("div");
-welcomeMessage.textContent = " Goooom";
+welcomeMessage.textContent = " مرحبا !";
 welcomeMessage.style.position = "fixed";
 welcomeMessage.style.top = "10px"; // من الأعلى
 welcomeMessage.style.left = "50%"; // منتصف العرض
