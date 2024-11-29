@@ -4,9 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>مكتبة كلية العلوم القانونية والاقتصادية</title>
-    <script defer data-domain="msyxxxx.github.io/libr" src="https://plausible.io/js/script.file-downloads.hash.outbound-links.pageview-props.revenue.tagged-events.js"></script>
-<script>window.plausible = window.plausible || function() { (window.plausible.q = window.plausible.q || []).push(arguments) }</script>
-
     <style>
         /* إعدادات عامة للصفحة */
         body {
@@ -60,7 +57,7 @@
             margin: 15px 0;
             border: none;
             border-radius: 30px;
-            font-size: 18px;
+            font-size: 12px;
             font-weight: bold;
             cursor: pointer;
             width: 100%;
@@ -151,6 +148,14 @@
             color: #0056b3;
         }
 
+        /* تصميم العنوان */
+        .header h1 {
+            font-size: 48px;
+            color: #fff;
+            text-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
+            margin-bottom: 20px;
+        }
+
         /* تصميم معلومات المطور */
         .developer-info {
             position: fixed;
@@ -159,6 +164,7 @@
             color: #ffffff;
             opacity: 0.8;
         }
+
         /* موقع زر الموسيقى */
         .music-button {
             position: fixed;
@@ -216,7 +222,6 @@
     text-align: center;
 }
 
-
 /* تأثير التمرير على الزر */
 .group-td-button:hover {
     background: linear-gradient(45deg, #feb47b, #ff7e5f); 
@@ -233,11 +238,146 @@
     outline: none; 
     box-shadow: 0 0 0 4px rgba(255, 126, 95, 0.5);
 }
+
+
+/* زر "كتب كلية العلوم القانونية والاقتصادية" */
+button.faculty {
+    background: linear-gradient(135deg, #6a0dad 20%, #4b0082 50%, #000000 100%); /* أخضر */
+    color: #ffffff; 
+    padding: 15px 30px; 
+    margin: 15px 0; 
+    border: none; 
+    border-radius: 30px; 
+    font-size: 12px; 
+    font-weight: bold; 
+    cursor: pointer; 
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2); 
+    transition: all 0.3s ease; 
+    width: 200px; 
+    text-align: center;
+}
+
+button.faculty:hover {
+    background: linear-gradient(45deg, #8bc34a, #4caf50); 
+    transform: scale(1.1); 
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3); 
+}
+
+button.faculty:active {
+    transform: scale(0.95);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+button.faculty:focus {
+    outline: none; 
+    box-shadow: 0 0 0 4px rgba(76, 175, 80, 0.5);
+}
+
+/* زر "مقاطع مفيدة" */
+button.useful-videos {
+    background: linear-gradient(45deg,#1a1a40, #ff0080); /* أزرق */
+    color: #ffffff; 
+    padding: 15px 30px; 
+    margin: 15px 0; 
+    border: none; 
+    border-radius: 30px; 
+    font-size: 12px; 
+    font-weight: bold; 
+    cursor: pointer; 
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2); 
+    transition: all 0.3s ease; 
+    width: 200px; 
+    text-align: center;
+}
+
+button.useful-videos:hover {
+    background: linear-gradient(45deg, #0288d1, #03a9f4); 
+    transform: scale(1.1); 
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3); 
+}
+
+button.useful-videos:active {
+    transform: scale(0.95);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+button.useful-videos:focus {
+    outline: none; 
+    box-shadow: 0 0 0 4px rgba(3, 169, 244, 0.5);
+}
+
+/* زر "أدوات ذكاء اصطناعي مفيدة" */
+button.ai-tools {
+    background: linear-gradient(45deg, #43cea2, #185a9d); /* برتقالي */
+    color: #ffffff; 
+    padding: 15px 30px; 
+    margin: 15px 0; 
+    border: none; 
+    border-radius: 30px; 
+    font-size: 12px; 
+    font-weight: bold; 
+    cursor: pointer; 
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2); 
+    transition: all 0.3s ease; 
+    width: 200px; 
+    text-align: center;
+}
+
+button.ai-tools:hover {
+    background: linear-gradient(45deg, #f57c00, #ff9800); 
+    transform: scale(1.1); 
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3); 
+}
+
+button.ai-tools:active {
+    transform: scale(0.95);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+button.ai-tools:focus {
+    outline: none; 
+    box-shadow: 0 0 0 4px rgba(255, 152, 0, 0.5);
+}
+
+/* زر "Group TD" */
+button.group-td-button {
+    background: linear-gradient(45deg, #ff7e5f, #feb47b); 
+    color: #fff; 
+    z-index:1000;
+    padding: 15px 30px; 
+    margin: 15px 0; 
+    border: none; 
+    border-radius: 30px; 
+    font-size: 10px; 
+    font-weight: bold; 
+    cursor: pointer; 
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2); 
+    transition: all 0.3s ease; 
+    width: 200px; 
+    text-align: center;
+}
+
+button.group-td-button:hover {
+    background: linear-gradient(45deg, #feb47b, #ff7e5f); 
+    transform: scale(1.1); 
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3); 
+}
+
+button.group-td-button:active {
+    transform: scale(0.95);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+button.group-td-button:focus {
+    outline: none; 
+    box-shadow: 0 0 0 4px rgba(255, 126, 95, 0.5);
+}
+
     </style>
 </head>
 <body>
 </div>
-    <script src="welcome.js"></script>
+<script src="welcome.js"></script>
 <!-- إضافة نقاط سوداء -->
 ‏    <div class="dot" style="top: 20%; left: 10%; animation-delay: 0s;"></div>
 ‏    <div class="dot" style="top: 25%; left: 30%; animation-delay: 0.2s;"></div>
@@ -265,12 +405,15 @@
     <div class="header">
 
     </div>
-    <button class="button" onclick="openSection('main')">كتب كلية العلوم القانونية والاقتصادية</button>
-  <button class="button" onclick="location.href='buff.html'">مقاطع مفيدة</button>
+       <button class="button faculty" onclick="openSection('main')">كتب كلية العلوم القانونية والاقتصادية</button>
+
+    <button class="button useful-videos" onclick="location.href='buff.html'">مقاطع مفيدة</button>
+
+    <button class="button ai-tools" onclick="window.location.href='tools.html'">ادوات ذكاء اصطناعي مفيدة</button>
+
 <button class="group-td-button" onclick="window.location.href='tdf.html'">Group TD</button>
-<button class="group-td-button" onclick="window.location.href='tools.html'"> ادوات ذكاء اصطناعي مفيدة</button>
  
- 
+
     <div class="header">
         <h4></h4>
     </div>
@@ -292,13 +435,32 @@
             document.getElementById('sidebar').classList.toggle('open');
         }
 
-        function toggleLanguage() {
+         function toggleLanguage() {
             isArabic = !isArabic;
             document.documentElement.lang = isArabic ? "ar" : "fr";
             document.dir = isArabic ? "rtl" : "ltr";
-            document.querySelector(".language-switch").textContent = isArabic ? "Changer la langue vers le français" : "تغيير اللغة للعربية";
-            document.querySelector("h1").textContent = isArabic ? "الـــمـــكـــتـــبــــة الـــجـــامـــعـــيــة" : "Bibliothèque Universitaire";
-            document.querySelector(".button").textContent = isArabic ? "كلية العلوم القانونية والاقتصادية" : "Faculté de Droit et d'Économie";
+            
+            // تغيير النصوص للغة المختارة
+            document.querySelector(".language-switch").textContent = isArabic 
+                ? "Changer la langue vers le français" 
+                : "تغيير اللغة للعربية";
+
+            document.querySelector(".button.faculty").textContent = isArabic 
+                ? "كتب كلية العلوم القانونية والاقتصادية" 
+                : "Livres de la Faculté de Droit et d'Économie";
+
+            document.querySelector(".button.useful-videos").textContent = isArabic 
+                ? "مقاطع مفيدة" 
+                : "Vidéos utiles";
+
+            document.querySelector(".button.ai-tools").textContent = isArabic 
+                ? "ادوات ذكاء اصطناعي مفيدة" 
+                : "Outils d'intelligence artificielle utiles";
+        }
+
+        // وظيفة افتراضية لزر "openSection"
+        function openSection(section) {
+            alert("فتح القسم: " + section);
         }
 
         function openSection(section) {
