@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>إدارة بيانات الأشخاص</title>
   <style>
-    /* إعدادات الصفحة الأساسية */
     body {
       margin: 0;
       padding: 0;
@@ -22,7 +21,6 @@
       margin-top: 20px;
     }
 
-    /* تصميم النموذج */
     form {
       background: #ffffff;
       box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
@@ -33,7 +31,7 @@
       margin: 20px auto;
     }
 
-    input {
+    input, button {
       width: 100%;
       padding: 12px;
       margin: 10px 0;
@@ -43,19 +41,11 @@
       transition: border 0.3s ease;
     }
 
-    input:focus {
-      border-color: #457b9d;
-      outline: none;
-    }
-
     button {
-      padding: 12px 20px;
-      font-size: 1rem;
-      color: #fff;
       background-color: #1d3557;
-      border: none;
-      border-radius: 8px;
+      color: #fff;
       cursor: pointer;
+      border: none;
       transition: background 0.3s;
     }
 
@@ -63,7 +53,6 @@
       background-color: #457b9d;
     }
 
-    /* تصميم الجدول */
     table {
       width: 90%;
       margin: 20px auto;
@@ -87,34 +76,23 @@
       background: #f3f4f6;
     }
 
-    /* أزرار عائمة */
-    .floating-buttons {
-      position: fixed;
-      bottom: 20px;
-      right: 20px;
-      display: flex;
-      flex-direction: column;
-      gap: 15px;
+    #progressBarContainer {
+      width: 80%;
+      margin: 20px auto;
+      background: #ddd;
+      border-radius: 20px;
+      height: 25px;
     }
 
-    .floating-button {
-      width: 60px;
-      height: 60px;
-      background: #1d3557;
-      color: #fff;
-      font-size: 1.5rem;
-      border-radius: 50%;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-      cursor: pointer;
-      transition: background 0.3s, transform 0.3s;
-    }
-
-    .floating-button:hover {
-      background: #457b9d;
-      transform: scale(1.1);
+    #progressBar {
+      width: 0;
+      height: 100%;
+      background: #4caf50;
+      border-radius: 20px;
+      text-align: center;
+      color: white;
+      line-height: 25px;
+      font-weight: bold;
     }
   </style>
 </head>
@@ -127,6 +105,14 @@
     <input type="text" id="id" placeholder="رقم التعريف (B0...)" required>
     <button type="button" onclick="addPerson()">إضافة</button>
   </form>
+
+  <input type="file" id="uploadImage" accept="image/*" style="margin: 20px;" />
+  <button onclick="processImage()">استخراج البيانات من الصورة</button>
+
+  <!-- شريط التقدم -->
+  <div id="progressBarContainer">
+    <div id="progressBar">0%</div>
+  </div>
 
   <table>
     <thead>
@@ -143,15 +129,12 @@
     </tbody>
   </table>
 
-  <div class="floating-buttons">
-    <div class="floating-button" onclick="downloadExcel()">📄</div>
-    <div class="floating-button" onclick="downloadPDF()">📑</div>
-  </div>
+  <button onclick="downloadExcel()">تحميل الجدول كملف Excel</button>
+  <button onclick="clearAll()">حذف جميع البيانات</button>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/tesseract.js@4.0.2/dist/tesseract.min.js"></script>
   <script>
-    // تخزين البيانات محلياً
     const data = JSON.parse(localStorage.getItem("personsData")) || [];
 
     function renderTable() {
@@ -193,25 +176,64 @@
       renderTable();
     }
 
+    function clearAll() {
+      if (confirm("هل أنت متأكد من حذف جميع البيانات؟")) {
+        data.length = 0;
+        renderTable();
+      }
+    }
+
     function downloadExcel() {
       const worksheet = XLSX.utils.json_to_sheet(data);
+      XLSX.utils.sheet_add_aoa(worksheet, [["#", "الاسم", "رقم الهاتف", "رقم التعريف"]], { origin: "A1" });
       const workbook = XLSX.utils.book_new();
       XLSX.utils.book_append_sheet(workbook, worksheet, "بيانات الأشخاص");
       XLSX.writeFile(workbook, "persons_data.xlsx");
     }
 
-    async function downloadPDF() {
-      const { jsPDF } = window.jspdf;
-      const pdf = new jsPDF();
-      pdf.text("بيانات الأشخاص", 10, 10);
+    async function processImage() {
+      const fileInput = document.getElementById("uploadImage");
+      const file = fileInput.files[0];
+      if (!file) {
+        alert("يرجى تحميل صورة!");
+        return;
+      }
 
-      let y = 20;
-      data.forEach((person, index) => {
-        pdf.text(`${index + 1}. ${person.name} - ${person.phone} - ${person.id}`, 10, y);
-        y += 10;
-      });
+      // إظهار شريط التقدم
+      document.getElementById("progressBarContainer").style.display = "block";
+      document.getElementById("progressBar").style.width = "0%";
+      document.getElementById("progressBar").innerText = "0%";
 
-      pdf.save("persons_data.pdf");
+      const reader = new FileReader();
+      reader.onload = async function () {
+        const result = await Tesseract.recognize(reader.result, "ara+eng", {
+          logger: (m) => {
+            if (m.status === "recognizing text") {
+              const progress = Math.round(m.progress * 100);
+              document.getElementById("progressBar").style.width = `${progress}%`;
+              document.getElementById("progressBar").innerText = `${progress}%`;
+            }
+          }
+        });
+
+        const rows = result.data.text.split("\n");
+
+        rows.forEach(row => {
+          const columns = row.split(/\s+/); // افتراض الفاصل بين الأعمدة
+          if (columns.length >= 3) {
+            data.push({
+              name: columns[0].trim(),
+              phone: columns[1].trim(),
+              id: columns[2].trim()
+            });
+          }
+        });
+        renderTable();
+
+        // إخفاء شريط التقدم عند الانتهاء
+        document.getElementById("progressBarContainer").style.display = "none";
+      };
+      reader.readAsDataURL(file);
     }
 
     document.addEventListener("DOMContentLoaded", renderTable);
