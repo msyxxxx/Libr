@@ -3,17 +3,17 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>إدارة معلومات الأشخاص</title>
+  <title>إدارة بيانات الأشخاص</title>
   <style>
-    /* إعدادات عامة */
+    /* إعدادات الصفحة الأساسية */
     body {
       margin: 0;
       padding: 0;
       font-family: "Arial", sans-serif;
       background-color: #f3f4f6;
       color: #333;
-      text-align: center;
       direction: rtl;
+      text-align: center;
     }
 
     h1 {
@@ -26,18 +26,17 @@
     form {
       background: #ffffff;
       box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-      border-radius: 8px;
+      border-radius: 10px;
       padding: 20px;
       width: 90%;
       max-width: 500px;
       margin: 20px auto;
-      display: flex;
-      flex-direction: column;
-      gap: 15px;
     }
 
     input {
+      width: 100%;
       padding: 12px;
+      margin: 10px 0;
       font-size: 1rem;
       border: 1px solid #ddd;
       border-radius: 8px;
@@ -50,18 +49,18 @@
     }
 
     button {
-      padding: 12px;
+      padding: 12px 20px;
       font-size: 1rem;
-      background: #1d3557;
-      color: white;
+      color: #fff;
+      background-color: #1d3557;
       border: none;
       border-radius: 8px;
       cursor: pointer;
-      transition: background 0.3s ease;
+      transition: background 0.3s;
     }
 
     button:hover {
-      background: #457b9d;
+      background-color: #457b9d;
     }
 
     /* تصميم الجدول */
@@ -69,63 +68,60 @@
       width: 90%;
       margin: 20px auto;
       border-collapse: collapse;
+      background: #fff;
       box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-      background: white;
-      border-radius: 8px;
-      overflow: hidden;
     }
 
     th, td {
-      padding: 12px;
+      padding: 10px;
       text-align: center;
-      border-bottom: 1px solid #ddd;
+      border: 1px solid #ddd;
     }
 
     th {
       background: #1d3557;
-      color: white;
+      color: #fff;
     }
 
-    tr:hover {
-      background: #f1f5f9;
-    }
-
-    .actions {
-      display: flex;
-      justify-content: center;
-      margin: 20px;
-      gap: 15px;
+    tr:nth-child(even) {
+      background: #f3f4f6;
     }
 
     /* أزرار عائمة */
-    .floating-btn {
+    .floating-buttons {
       position: fixed;
       bottom: 20px;
       right: 20px;
-      background: #1d3557;
-      color: white;
-      border-radius: 50%;
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+
+    .floating-button {
       width: 60px;
       height: 60px;
+      background: #1d3557;
+      color: #fff;
+      font-size: 1.5rem;
+      border-radius: 50%;
       display: flex;
       justify-content: center;
       align-items: center;
-      font-size: 1.5rem;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
       cursor: pointer;
-      transition: background 0.3s ease, transform 0.3s ease;
+      transition: background 0.3s, transform 0.3s;
     }
 
-    .floating-btn:hover {
+    .floating-button:hover {
       background: #457b9d;
       transform: scale(1.1);
     }
   </style>
 </head>
 <body>
-  <h1>إدارة معلومات الأشخاص</h1>
+  <h1>إدارة بيانات الأشخاص</h1>
 
-  <form id="person-form">
+  <form id="personForm">
     <input type="text" id="name" placeholder="الاسم" required>
     <input type="text" id="phone" placeholder="رقم الهاتف" required>
     <input type="text" id="id" placeholder="رقم التعريف (B0...)" required>
@@ -142,38 +138,39 @@
         <th>حذف</th>
       </tr>
     </thead>
-    <tbody id="table-body">
-      <!-- الصفوف تُضاف ديناميكياً هنا -->
+    <tbody id="tableBody">
+      <!-- يتم إدراج البيانات هنا -->
     </tbody>
   </table>
 
-  <div class="actions">
-    <button onclick="downloadExcel()">تحميل Excel</button>
-    <button onclick="downloadPDF()">تحميل PDF</button>
+  <div class="floating-buttons">
+    <div class="floating-button" onclick="downloadExcel()">📄</div>
+    <div class="floating-button" onclick="downloadPDF()">📑</div>
   </div>
-
-  <div class="floating-btn" onclick="scrollToTop()">↑</div>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
   <script>
-    let data = JSON.parse(localStorage.getItem("personData")) || [];
+    // تخزين البيانات محلياً
+    const data = JSON.parse(localStorage.getItem("personsData")) || [];
 
     function renderTable() {
-      const tableBody = document.getElementById("table-body");
+      const tableBody = document.getElementById("tableBody");
       tableBody.innerHTML = "";
+
       data.forEach((person, index) => {
-        const row = document.createElement("tr");
-        row.innerHTML = `
-          <td>${index + 1}</td>
-          <td>${person.name}</td>
-          <td>${person.phone}</td>
-          <td>${person.id}</td>
-          <td><button onclick="removePerson(${index})">حذف</button></td>
-        `;
-        tableBody.appendChild(row);
+        const row = `
+          <tr>
+            <td>${index + 1}</td>
+            <td>${person.name}</td>
+            <td>${person.phone}</td>
+            <td>${person.id}</td>
+            <td><button onclick="deletePerson(${index})">❌</button></td>
+          </tr>`;
+        tableBody.innerHTML += row;
       });
-      localStorage.setItem("personData", JSON.stringify(data));
+
+      localStorage.setItem("personsData", JSON.stringify(data));
     }
 
     function addPerson() {
@@ -182,16 +179,16 @@
       const id = document.getElementById("id").value.trim();
 
       if (!name || !phone || !id) {
-        alert("يرجى إدخال جميع الحقول!");
+        alert("يرجى ملء جميع الحقول!");
         return;
       }
 
       data.push({ name, phone, id });
       renderTable();
-      document.getElementById("person-form").reset();
+      document.getElementById("personForm").reset();
     }
 
-    function removePerson(index) {
+    function deletePerson(index) {
       data.splice(index, 1);
       renderTable();
     }
@@ -200,7 +197,7 @@
       const worksheet = XLSX.utils.json_to_sheet(data);
       const workbook = XLSX.utils.book_new();
       XLSX.utils.book_append_sheet(workbook, worksheet, "بيانات الأشخاص");
-      XLSX.writeFile(workbook, "person_data.xlsx");
+      XLSX.writeFile(workbook, "persons_data.xlsx");
     }
 
     async function downloadPDF() {
@@ -214,11 +211,7 @@
         y += 10;
       });
 
-      pdf.save("person_data.pdf");
-    }
-
-    function scrollToTop() {
-      window.scrollTo({ top: 0, behavior: "smooth" });
+      pdf.save("persons_data.pdf");
     }
 
     document.addEventListener("DOMContentLoaded", renderTable);
