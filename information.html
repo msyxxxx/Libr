@@ -1,227 +1,236 @@
 <!DOCTYPE html>
-<html lang="ar">
+<html lang="ar" dir="rtl">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>إدارة معلومات الأشخاص</title>
-  <style>
-    /* إعدادات عامة */
-    body {
-      margin: 0;
-      padding: 0;
-      font-family: "Arial", sans-serif;
-      background-color: #f3f4f6;
-      color: #333;
-      text-align: center;
-      direction: rtl;
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UGEM Membership</title>
+    <style>
+        /* CSS for UGEM Membership Page */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f9f9f9;
+            color: #333;
+        }
 
-    h1 {
-      font-size: 2.5rem;
-      color: #1d3557;
-      margin-top: 20px;
-    }
+        header {
+            background-color: #ffdd00;
+            color: #000;
+            text-align: center;
+            padding: 20px;
+        }
 
-    /* تصميم النموذج */
-    form {
-      background: #ffffff;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-      border-radius: 8px;
-      padding: 20px;
-      width: 90%;
-      max-width: 500px;
-      margin: 20px auto;
-      display: flex;
-      flex-direction: column;
-      gap: 15px;
-    }
+        header h1 {
+            margin: 0;
+            font-size: 1.8rem;
+        }
 
-    input {
-      padding: 12px;
-      font-size: 1rem;
-      border: 1px solid #ddd;
-      border-radius: 8px;
-      transition: border 0.3s ease;
-    }
+        main {
+            padding: 20px;
+        }
 
-    input:focus {
-      border-color: #457b9d;
-      outline: none;
-    }
+        section {
+            margin-bottom: 20px;
+            padding: 15px;
+            background: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
 
-    button {
-      padding: 12px;
-      font-size: 1rem;
-      background: #1d3557;
-      color: white;
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
-      transition: background 0.3s ease;
-    }
+        label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
 
-    button:hover {
-      background: #457b9d;
-    }
+        input, select, button {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
 
-    /* تصميم الجدول */
-    table {
-      width: 90%;
-      margin: 20px auto;
-      border-collapse: collapse;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-      background: white;
-      border-radius: 8px;
-      overflow: hidden;
-    }
+        button {
+            background-color: #ffdd00;
+            color: #000;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
 
-    th, td {
-      padding: 12px;
-      text-align: center;
-      border-bottom: 1px solid #ddd;
-    }
+        button:hover {
+            background-color: #e6c300;
+        }
 
-    th {
-      background: #1d3557;
-      color: white;
-    }
+        #floatingCard {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: #fff;
+            padding: 20px;
+            width: 300px;
+            text-align: center;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            display: none;
+            z-index: 1000;
+        }
 
-    tr:hover {
-      background: #f1f5f9;
-    }
+        #floatingCard img {
+            max-width: 100px;
+            margin: 10px 0;
+        }
 
-    .actions {
-      display: flex;
-      justify-content: center;
-      margin: 20px;
-      gap: 15px;
-    }
+        #statusMessage {
+            font-weight: bold;
+        }
 
-    /* أزرار عائمة */
-    .floating-btn {
-      position: fixed;
-      bottom: 20px;
-      right: 20px;
-      background: #1d3557;
-      color: white;
-      border-radius: 50%;
-      width: 60px;
-      height: 60px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      font-size: 1.5rem;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
-      cursor: pointer;
-      transition: background 0.3s ease, transform 0.3s ease;
-    }
-
-    .floating-btn:hover {
-      background: #457b9d;
-      transform: scale(1.1);
-    }
-  </style>
+        .error {
+            color: red;
+        }
+    </style>
 </head>
 <body>
-  <h1>إدارة معلومات الأشخاص</h1>
+    <header>
+        <h1>نقابة الاتحاد العام للطلاب الموريتانيين (UGEM)</h1>
+    </header>
+    <main>
+        <!-- Membership Form -->
+        <section id="membership-form">
+            <h2>نموذج الانتساب</h2>
+            <form id="form">
+                <label>الاسم الكامل:
+                    <input type="text" id="fullName" required>
+                </label>
+                <label>رقم الهاتف:
+                    <input type="tel" id="phoneNumber" required>
+                </label>
+                <label>الرقم التعريفي:
+                    <input type="text" id="idNumber" placeholder="B0XXXX" required>
+                </label>
+                <label>المستوى:
+                    <select id="level" required>
+                        <option value="L1">L1</option>
+                        <option value="L2">L2</option>
+                        <option value="L3">L3</option>
+                    </select>
+                </label>
+                <label>رفع صورة (اختياري):
+                    <input type="file" id="image" accept="image/*">
+                </label>
+                <button type="button" id="joinBtn">انتساب</button>
+            </form>
+        </section>
 
-  <form id="person-form">
-    <input type="text" id="name" placeholder="الاسم" required>
-    <input type="text" id="phone" placeholder="رقم الهاتف" required>
-    <input type="text" id="id" placeholder="رقم التعريف (B0...)" required>
-    <button type="button" onclick="addPerson()">إضافة</button>
-  </form>
+        <!-- Membership Verification -->
+        <section id="membership-status">
+            <h2>التحقق من الانتساب</h2>
+            <form id="checkForm">
+                <label>أدخل الرمز الفريد للتحقق:
+                    <input type="text" id="checkId" required>
+                </label>
+                <button type="button" id="checkBtn">تحقق</button>
+            </form>
+            <div id="statusMessage"></div>
+        </section>
+    </main>
 
-  <table>
-    <thead>
-      <tr>
-        <th>#</th>
-        <th>الاسم</th>
-        <th>رقم الهاتف</th>
-        <th>رقم التعريف</th>
-        <th>حذف</th>
-      </tr>
-    </thead>
-    <tbody id="table-body">
-      <!-- الصفوف تُضاف ديناميكياً هنا -->
-    </tbody>
-  </table>
+    <!-- Floating Membership Card -->
+    <div id="floatingCard"></div>
 
-  <div class="actions">
-    <button onclick="downloadExcel()">تحميل Excel</button>
-    <button onclick="downloadPDF()">تحميل PDF</button>
-  </div>
+    <script>
+        const API_URL = "https://sheetdb.io/api/v1/6rpxfdbe7t9ub";
 
-  <div class="floating-btn" onclick="scrollToTop()">↑</div>
+        // Display floating card
+        const displayCard = (member) => {
+            const floatingCard = document.getElementById("floatingCard");
+            floatingCard.innerHTML = `
+                <h3>بطاقة الانتساب</h3>
+                <p>الاسم: ${member.name}</p>
+                <p>الهاتف: ${member.phone}</p>
+                <p>الرقم التعريفي: ${member.id}</p>
+                <p>المستوى: ${member.level}</p>
+                ${member.image ? `<img src="${member.image}" alt="صورة العضو">` : ""}
+            `;
+            floatingCard.style.display = "block";
+            setTimeout(() => { floatingCard.style.display = "none"; }, 5000);
+        };
 
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
-  <script>
-    let data = JSON.parse(localStorage.getItem("personData")) || [];
+        // Add member
+        document.getElementById("joinBtn").addEventListener("click", async () => {
+            const name = document.getElementById("fullName").value;
+            const phone = document.getElementById("phoneNumber").value;
+            const id = document.getElementById("idNumber").value;
+            const level = document.getElementById("level").value;
+            const imageInput = document.getElementById("image").files[0];
 
-    function renderTable() {
-      const tableBody = document.getElementById("table-body");
-      tableBody.innerHTML = "";
-      data.forEach((person, index) => {
-        const row = document.createElement("tr");
-        row.innerHTML = `
-          <td>${index + 1}</td>
-          <td>${person.name}</td>
-          <td>${person.phone}</td>
-          <td>${person.id}</td>
-          <td><button onclick="removePerson(${index})">حذف</button></td>
-        `;
-        tableBody.appendChild(row);
-      });
-      localStorage.setItem("personData", JSON.stringify(data));
-    }
+            if (!name || !phone || !id || !level) {
+                alert("يرجى ملء جميع الحقول المطلوبة!");
+                return;
+            }
 
-    function addPerson() {
-      const name = document.getElementById("name").value.trim();
-      const phone = document.getElementById("phone").value.trim();
-      const id = document.getElementById("id").value.trim();
+            const reader = new FileReader();
+            reader.onload = async () => {
+                const image = imageInput ? reader.result : null;
+                const member = { name, phone, id, level, image };
+                
+                // Send data to SheetDB
+                const response = await fetch(API_URL, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(member),
+                });
 
-      if (!name || !phone || !id) {
-        alert("يرجى إدخال جميع الحقول!");
-        return;
-      }
+                if (response.ok) {
+                    alert("تم حفظ البيانات بنجاح!");
+                    displayCard(member);
+                } else {
+                    alert("حدث خطأ أثناء حفظ البيانات.");
+                }
+            };
+            if (imageInput) {
+                reader.readAsDataURL(imageInput);
+            } else {
+                const member = { name, phone, id, level, image: null };
+                const response = await fetch(API_URL, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(member),
+                });
 
-      data.push({ name, phone, id });
-      renderTable();
-      document.getElementById("person-form").reset();
-    }
+                if (response.ok) {
+                    alert("تم حفظ البيانات بنجاح!");
+                    displayCard(member);
+                } else {
+                    alert("حدث خطأ أثناء حفظ البيانات.");
+                }
+            }
+        });
 
-    function removePerson(index) {
-      data.splice(index, 1);
-      renderTable();
-    }
+        // Verify membership
+        document.getElementById("checkBtn").addEventListener("click", async () => {
+            const checkId = document.getElementById("checkId").value;
 
-    function downloadExcel() {
-      const worksheet = XLSX.utils.json_to_sheet(data);
-      const workbook = XLSX.utils.book_new();
-      XLSX.utils.book_append_sheet(workbook, worksheet, "بيانات الأشخاص");
-      XLSX.writeFile(workbook, "person_data.xlsx");
-    }
+            try {
+                const response = await fetch(`${API_URL}/search?id=${checkId}`);
+                const data = await response.json();
 
-    async function downloadPDF() {
-      const { jsPDF } = window.jspdf;
-      const pdf = new jsPDF();
-      pdf.text("بيانات الأشخاص", 10, 10);
-
-      let y = 20;
-      data.forEach((person, index) => {
-        pdf.text(`${index + 1}. ${person.name} - ${person.phone} - ${person.id}`, 10, y);
-        y += 10;
-      });
-
-      pdf.save("person_data.pdf");
-    }
-
-    function scrollToTop() {
-      window.scrollTo({ top: 0, behavior: "smooth" });
-    }
-
-    document.addEventListener("DOMContentLoaded", renderTable);
-  </script>
+                const statusMessage = document.getElementById("statusMessage");
+                if (data.length > 0) {
+                    const member = data[0];
+                    statusMessage.textContent = `العضو موجود: ${member.name}`;
+                } else {
+                    statusMessage.textContent = "العضو غير موجود!";
+                    statusMessage.classList.add("error");
+                }
+            } catch (error) {
+                console.error("Error:", error);
+                alert("حدث خطأ أثناء التحقق.");
+            }
+        });
+    </script>
 </body>
 </html>
