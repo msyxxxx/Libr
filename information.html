@@ -1,47 +1,43 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="ar">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>UGEM Membership</title>
+    <title>الانتساب لنقابة UGEM</title>
     <style>
-        /* CSS for UGEM Membership Page */
         body {
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
             background-color: #f9f9f9;
-            color: #333;
+            direction: rtl;
         }
 
         header {
-            background-color: #ffdd00;
+            background-color: #FFD700;
             color: #000;
+            padding: 20px;
             text-align: center;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 20px auto;
             padding: 20px;
-        }
-
-        header h1 {
-            margin: 0;
-            font-size: 1.8rem;
-        }
-
-        main {
-            padding: 20px;
-        }
-
-        section {
-            margin-bottom: 20px;
-            padding: 15px;
             background: #fff;
-            border-radius: 10px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+        }
+
+        .container h2 {
+            text-align: center;
+            color: #444;
         }
 
         label {
             display: block;
-            margin-bottom: 10px;
-            font-weight: bold;
+            margin-bottom: 8px;
+            color: #333;
         }
 
         input, select, button {
@@ -50,187 +46,169 @@
             margin-bottom: 15px;
             border: 1px solid #ccc;
             border-radius: 5px;
+            font-size: 16px;
         }
 
         button {
-            background-color: #ffdd00;
+            background-color: #FFD700;
             color: #000;
             font-weight: bold;
             cursor: pointer;
-            transition: background-color 0.3s;
         }
 
         button:hover {
-            background-color: #e6c300;
+            background-color: #e6c200;
         }
 
-        #floatingCard {
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background: #fff;
-            padding: 20px;
-            width: 300px;
-            text-align: center;
-            border-radius: 10px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+        .card {
             display: none;
-            z-index: 1000;
+            text-align: center;
+            background: #fff;
+            border-radius: 10px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+            padding: 20px;
+            margin-top: 20px;
         }
 
-        #floatingCard img {
-            max-width: 100px;
-            margin: 10px 0;
+        .card img {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-bottom: 10px;
         }
 
-        #statusMessage {
-            font-weight: bold;
+        .card .info {
+            text-align: left;
         }
 
-        .error {
-            color: red;
+        .card p {
+            margin: 5px 0;
         }
     </style>
 </head>
 <body>
     <header>
-        <h1>نقابة الاتحاد العام للطلاب الموريتانيين (UGEM)</h1>
+        <h1>الانتساب لنقابة الاتحاد العام للطلاب الموريتانيين (UGEM)</h1>
     </header>
-    <main>
-        <!-- Membership Form -->
-        <section id="membership-form">
-            <h2>نموذج الانتساب</h2>
-            <form id="form">
-                <label>الاسم الكامل:
-                    <input type="text" id="fullName" required>
-                </label>
-                <label>رقم الهاتف:
-                    <input type="tel" id="phoneNumber" required>
-                </label>
-                <label>الرقم التعريفي:
-                    <input type="text" id="idNumber" placeholder="B0XXXX" required>
-                </label>
-                <label>المستوى:
-                    <select id="level" required>
-                        <option value="L1">L1</option>
-                        <option value="L2">L2</option>
-                        <option value="L3">L3</option>
-                    </select>
-                </label>
-                <label>رفع صورة (اختياري):
-                    <input type="file" id="image" accept="image/*">
-                </label>
-                <button type="button" id="joinBtn">انتساب</button>
-            </form>
-        </section>
 
-        <!-- Membership Verification -->
-        <section id="membership-status">
-            <h2>التحقق من الانتساب</h2>
-            <form id="checkForm">
-                <label>أدخل الرمز الفريد للتحقق:
-                    <input type="text" id="checkId" required>
-                </label>
-                <button type="button" id="checkBtn">تحقق</button>
-            </form>
-            <div id="statusMessage"></div>
-        </section>
-    </main>
+    <div class="container">
+        <h2>نموذج الانتساب</h2>
+        <form id="membershipForm">
+            <label for="fullName">الاسم الكامل</label>
+            <input type="text" id="fullName" name="fullName" required>
 
-    <!-- Floating Membership Card -->
-    <div id="floatingCard"></div>
+            <label for="phone">رقم الهاتف</label>
+            <input type="tel" id="phone" name="phone" required>
+
+            <label for="studentId">الرقم التعريفي</label>
+            <input type="text" id="studentId" name="studentId" required>
+
+            <label for="level">المستوى</label>
+            <select id="level" name="level" required>
+                <option value="L1">L1</option>
+                <option value="L2">L2</option>
+                <option value="L3">L3</option>
+            </select>
+
+            <label for="photo">الصورة (اختياري)</label>
+            <input type="file" id="photo" name="photo" accept="image/*">
+
+            <button type="button" onclick="submitForm()">انتساب</button>
+        </form>
+
+        <h2>تحقق من الانتساب</h2>
+        <form id="verificationForm">
+            <label for="verifyId">الرمز التعريفي</label>
+            <input type="text" id="verifyId" name="verifyId" required>
+            <button type="button" onclick="verifyMembership()">تحقق</button>
+        </form>
+
+        <div id="membershipCard" class="card"></div>
+    </div>
 
     <script>
-        const API_URL = "https://sheetdb.io/api/v1/k9986jo59yrvl";
+        const API_URL = 'https://sheetdb.io/api/v1/k9986jo59yrvl';
 
-        // Display floating card
-        const displayCard = (member) => {
-            const floatingCard = document.getElementById("floatingCard");
-            floatingCard.innerHTML = `
-                <h3>بطاقة الانتساب</h3>
-                <p>الاسم: ${member.name}</p>
-                <p>الهاتف: ${member.phone}</p>
-                <p>الرقم التعريفي: ${member.id}</p>
-                <p>المستوى: ${member.level}</p>
-                ${member.image ? `<img src="${member.image}" alt="صورة العضو">` : ""}
-            `;
-            floatingCard.style.display = "block";
-            setTimeout(() => { floatingCard.style.display = "none"; }, 5000);
-        };
+        function generateUniqueId() {
+            return 'UGEM-' + Math.random().toString(36).substr(2, 9).toUpperCase();
+        }
 
-        // Add member
-        document.getElementById("joinBtn").addEventListener("click", async () => {
-            const name = document.getElementById("fullName").value;
-            const phone = document.getElementById("phoneNumber").value;
-            const id = document.getElementById("idNumber").value;
-            const level = document.getElementById("level").value;
-            const imageInput = document.getElementById("image").files[0];
+        async function submitForm() {
+            const fullName = document.getElementById('fullName').value;
+            const phone = document.getElementById('phone').value;
+            const studentId = document.getElementById('studentId').value;
+            const level = document.getElementById('level').value;
+            const photoInput = document.getElementById('photo');
+            const uniqueId = generateUniqueId();
 
-            if (!name || !phone || !id || !level) {
-                alert("يرجى ملء جميع الحقول المطلوبة!");
-                return;
-            }
-
-            const reader = new FileReader();
-            reader.onload = async () => {
-                const image = imageInput ? reader.result : null;
-                const member = { name, phone, id, level, image };
-                
-                // Send data to SheetDB
-                const response = await fetch(API_URL, {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify(member),
-                });
-
-                if (response.ok) {
-                    alert("تم حفظ البيانات بنجاح!");
-                    displayCard(member);
-                } else {
-                    alert("حدث خطأ أثناء حفظ البيانات.");
-                }
+            const formData = {
+                fullName,
+                phone,
+                studentId,
+                level,
+                uniqueId
             };
-            if (imageInput) {
-                reader.readAsDataURL(imageInput);
+
+            if (photoInput.files.length > 0) {
+                const reader = new FileReader();
+                reader.onload = async function () {
+                    formData.photo = reader.result;
+                    await saveDataToSheet(formData);
+                };
+                reader.readAsDataURL(photoInput.files[0]);
             } else {
-                const member = { name, phone, id, level, image: null };
-                const response = await fetch(API_URL, {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify(member),
-                });
-
-                if (response.ok) {
-                    alert("تم حفظ البيانات بنجاح!");
-                    displayCard(member);
-                } else {
-                    alert("حدث خطأ أثناء حفظ البيانات.");
-                }
+                await saveDataToSheet(formData);
             }
-        });
+        }
 
-        // Verify membership
-        document.getElementById("checkBtn").addEventListener("click", async () => {
-            const checkId = document.getElementById("checkId").value;
+        async function saveDataToSheet(data) {
+            try {
+                await fetch(API_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(data),
+                });
+                alert('تم تسجيل الانتساب بنجاح!');
+                displayMembershipCard(data);
+            } catch (error) {
+                alert('حدث خطأ أثناء حفظ البيانات.');
+            }
+        }
+
+        function displayMembershipCard(data) {
+            const card = document.getElementById('membershipCard');
+            card.innerHTML = `
+                <div class="info">
+                    ${data.photo ? `<img src="${data.photo}" alt="صورة العضو">` : ''}
+                    <p><strong>الاسم الكامل:</strong> ${data.fullName}</p>
+                    <p><strong>رقم الهاتف:</strong> ${data.phone}</p>
+                    <p><strong>الرقم التعريفي:</strong> ${data.studentId}</p>
+                    <p><strong>المستوى:</strong> ${data.level}</p>
+                    <p><strong>الرمز الفريد:</strong> ${data.uniqueId}</p>
+                </div>
+            `;
+            card.style.display = 'block';
+        }
+
+        async function verifyMembership() {
+            const verifyId = document.getElementById('verifyId').value;
 
             try {
-                const response = await fetch(`${API_URL}/search?id=${checkId}`);
+                const response = await fetch(`${API_URL}/search?uniqueId=${verifyId}`);
                 const data = await response.json();
 
-                const statusMessage = document.getElementById("statusMessage");
                 if (data.length > 0) {
-                    const member = data[0];
-                    statusMessage.textContent = `العضو موجود: ${member.name}`;
+                    alert(`العضو منتسب. الاسم: ${data[0].fullName}`);
                 } else {
-                    statusMessage.textContent = "العضو غير موجود!";
-                    statusMessage.classList.add("error");
+                    alert('الرمز غير موجود. العضو غير منتسب.');
                 }
             } catch (error) {
-                console.error("Error:", error);
-                alert("حدث خطأ أثناء التحقق.");
+                alert('حدث خطأ أثناء التحقق من الانتساب.');
             }
-        });
+        }
     </script>
 </body>
 </html>
