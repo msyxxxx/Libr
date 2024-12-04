@@ -1,3 +1,165 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>إدارة بيانات الأشخاص</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: "Cairo", sans-serif;
+      background-color: #f0f0f5;
+      color: #333;
+      direction: rtl;
+      text-align: center;
+    }
+
+    h1 {
+      font-size: 2.5rem;
+      color: #0077b6;
+      margin-top: 20px;
+      animation: fadeIn 1s ease-in-out;
+    }
+
+    form {
+      background: #ffffff;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+      border-radius: 15px;
+      padding: 25px;
+      width: 90%;
+      max-width: 500px;
+      margin: 20px auto;
+      animation: slideIn 0.8s ease-in-out;
+    }
+
+    input, button {
+      width: 100%;
+      padding: 14px;
+      margin: 10px 0;
+      font-size: 1rem;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      transition: all 0.3s ease;
+    }
+
+    input:focus {
+      border-color: #0077b6;
+      outline: none;
+      box-shadow: 0 0 5px rgba(0, 119, 182, 0.3);
+    }
+
+    button {
+      background-color: #0077b6;
+      color: #fff;
+      cursor: pointer;
+      border: none;
+      font-weight: bold;
+      transition: background 0.3s, transform 0.2s;
+    }
+
+    button:hover {
+      background-color: #005f8a;
+      transform: scale(1.02);
+    }
+
+    table {
+      width: 90%;
+      margin: 20px auto;
+      border-collapse: collapse;
+      background: #fff;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      animation: fadeIn 1s ease-in-out;
+    }
+
+    th, td {
+      padding: 12px;
+      text-align: center;
+      border: 1px solid #ddd;
+    }
+
+    th {
+      background: #0077b6;
+      color: #fff;
+    }
+
+    tr:nth-child(even) {
+      background: #f0f0f5;
+    }
+
+    tr:hover {
+      background: #e3f2fd;
+    }
+
+    #progressBarContainer {
+      width: 80%;
+      margin: 20px auto;
+      background: #ddd;
+      border-radius: 20px;
+      height: 25px;
+      display: none;
+    }
+
+    #progressBar {
+      width: 0;
+      height: 100%;
+      background: #4caf50;
+      border-radius: 20px;
+      text-align: center;
+      color: white;
+      line-height: 25px;
+      font-weight: bold;
+      transition: width 0.3s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    @keyframes slideIn {
+      from { transform: translateY(-50px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+  </style>
+</head>
+<body>
+  <h1>إدارة بيانات الأشخاص</h1>
+
+  <form id="personForm">
+    <input type="text" id="name" placeholder="الاسم" required>
+<input type="tel" id="phone" inputmode="numeric" placeholder="رقم الهاتف" required>
+    <input type="text" id="id" placeholder="رقم التعريف (B0...)" required>
+    <button type="button" onclick="addPerson()">إضافة</button>
+  </form>
+
+  <input type="file" id="uploadImage" accept="image/*" style="margin: 20px;">
+  <button onclick="processImage()">استخراج البيانات من الصورة</button>
+
+  <div id="progressBarContainer">
+    <div id="progressBar">0%</div>
+  </div>
+
+  <table>
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>الاسم</th>
+        <th>رقم الهاتف</th>
+        <th>رقم التعريف</th>
+        <th>حذف</th>
+      </tr>
+    </thead>
+    <tbody id="tableBody">
+      <!-- يتم إدراج البيانات هنا -->
+    </tbody>
+  </table>
+
+  <button onclick="downloadExcel()">تحميل الجدول كملف Excel</button>
+  <button onclick="clearAll()">حذف جميع البيانات</button>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/tesseract.js@4.0.2/dist/tesseract.min.js"></script>
 <script>
   const data = JSON.parse(localStorage.getItem("personsData")) || [];
 
@@ -100,3 +262,5 @@
 
   document.addEventListener("DOMContentLoaded", renderTable);
 </script>
+</body>
+</html>
