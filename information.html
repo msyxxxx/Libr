@@ -1,266 +1,102 @@
-<!DOCTYPE html>
-<html lang="ar">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>إدارة بيانات الأشخاص</title>
-  <style>
-    body {
-      margin: 0;
-      padding: 0;
-      font-family: "Cairo", sans-serif;
-      background-color: #f0f0f5;
-      color: #333;
-      direction: rtl;
-      text-align: center;
+<script>
+  const data = JSON.parse(localStorage.getItem("personsData")) || [];
+
+  function renderTable() {
+    const tableBody = document.getElementById("tableBody");
+    tableBody.innerHTML = "";
+
+    data.forEach((person, index) => {
+      const row = `
+        <tr>
+          <td>${index + 1}</td>
+          <td>${person.name}</td>
+          <td>${person.phone}</td>
+          <td>${person.id}</td>
+          <td><button style="color: red;" onclick="deletePerson(${index})">❌</button></td>
+        </tr>`;
+      tableBody.innerHTML += row;
+    });
+
+    localStorage.setItem("personsData", JSON.stringify(data));
+  }
+
+  function addPerson() {
+    const name = document.getElementById("name").value.trim();
+    const phone = document.getElementById("phone").value.trim();
+    const id = document.getElementById("id").value.trim();
+
+    if (!name || !phone || !id) {
+      alert("يرجى ملء جميع الحقول!");
+      return;
     }
 
-    h1 {
-      font-size: 2.5rem;
-      color: #0077b6;
-      margin-top: 20px;
-      animation: fadeIn 1s ease-in-out;
+    data.push({ name, phone, id });
+    renderTable();
+    document.getElementById("personForm").reset();
+  }
+
+  function deletePerson(index) {
+    data.splice(index, 1);
+    renderTable();
+  }
+
+  function clearAll() {
+    if (confirm("هل أنت متأكد من حذف جميع البيانات؟")) {
+      data.length = 0;
+      renderTable();
+    }
+  }
+
+  function downloadExcel() {
+    const worksheet = XLSX.utils.json_to_sheet(data);
+    XLSX.utils.sheet_add_aoa(worksheet, [["#", "الاسم", "رقم الهاتف", "رقم التعريف"]], { origin: "A1" });
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, "بيانات الأشخاص");
+    XLSX.writeFile(workbook, "persons_data.xlsx");
+  }
+
+  async function processImage() {
+    const fileInput = document.getElementById("uploadImage");
+    const file = fileInput.files[0];
+    if (!file) {
+      alert("يرجى تحميل صورة!");
+      return;
     }
 
-    form {
-      background: #ffffff;
-      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
-      border-radius: 15px;
-      padding: 25px;
-      width: 90%;
-      max-width: 500px;
-      margin: 20px auto;
-      animation: slideIn 0.8s ease-in-out;
-    }
+    document.getElementById("progressBarContainer").style.display = "block";
+    document.getElementById("progressBar").style.width = "0%";
+    document.getElementById("progressBar").innerText = "0%";
 
-    input, button {
-      width: 100%;
-      padding: 14px;
-      margin: 10px 0;
-      font-size: 1rem;
-      border: 1px solid #ddd;
-      border-radius: 8px;
-      transition: all 0.3s ease;
-    }
-
-    input:focus {
-      border-color: #0077b6;
-      outline: none;
-      box-shadow: 0 0 5px rgba(0, 119, 182, 0.3);
-    }
-
-    button {
-      background-color: #0077b6;
-      color: #fff;
-      cursor: pointer;
-      border: none;
-      font-weight: bold;
-      transition: background 0.3s, transform 0.2s;
-    }
-
-    button:hover {
-      background-color: #005f8a;
-      transform: scale(1.02);
-    }
-
-    table {
-      width: 90%;
-      margin: 20px auto;
-      border-collapse: collapse;
-      background: #fff;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-      animation: fadeIn 1s ease-in-out;
-    }
-
-    th, td {
-      padding: 12px;
-      text-align: center;
-      border: 1px solid #ddd;
-    }
-
-    th {
-      background: #0077b6;
-      color: #fff;
-    }
-
-    tr:nth-child(even) {
-      background: #f0f0f5;
-    }
-
-    tr:hover {
-      background: #e3f2fd;
-    }
-
-    #progressBarContainer {
-      width: 80%;
-      margin: 20px auto;
-      background: #ddd;
-      border-radius: 20px;
-      height: 25px;
-      display: none;
-    }
-
-    #progressBar {
-      width: 0;
-      height: 100%;
-      background: #4caf50;
-      border-radius: 20px;
-      text-align: center;
-      color: white;
-      line-height: 25px;
-      font-weight: bold;
-      transition: width 0.3s ease;
-    }
-
-    @keyframes fadeIn {
-      from { opacity: 0; }
-      to { opacity: 1; }
-    }
-
-    @keyframes slideIn {
-      from { transform: translateY(-50px); opacity: 0; }
-      to { transform: translateY(0); opacity: 1; }
-    }
-  </style>
-</head>
-<body>
-  <h1>إدارة بيانات الأشخاص</h1>
-
-  <form id="personForm">
-    <input type="text" id="name" placeholder="الاسم" required>
-<input type="tel" id="phone" inputmode="numeric" placeholder="رقم الهاتف" required>
-    <input type="text" id="id" placeholder="رقم التعريف (B0...)" required>
-    <button type="button" onclick="addPerson()">إضافة</button>
-  </form>
-
-  <input type="file" id="uploadImage" accept="image/*" style="margin: 20px;">
-  <button onclick="processImage()">استخراج البيانات من الصورة</button>
-
-  <div id="progressBarContainer">
-    <div id="progressBar">0%</div>
-  </div>
-
-  <table>
-    <thead>
-      <tr>
-        <th>#</th>
-        <th>الاسم</th>
-        <th>رقم الهاتف</th>
-        <th>رقم التعريف</th>
-        <th>حذف</th>
-      </tr>
-    </thead>
-    <tbody id="tableBody">
-      <!-- يتم إدراج البيانات هنا -->
-    </tbody>
-  </table>
-
-  <button onclick="downloadExcel()">تحميل الجدول كملف Excel</button>
-  <button onclick="clearAll()">حذف جميع البيانات</button>
-
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/tesseract.js@4.0.2/dist/tesseract.min.js"></script>
-  <script>
-    const data = JSON.parse(localStorage.getItem("personsData")) || [];
-
-    function renderTable() {
-      const tableBody = document.getElementById("tableBody");
-      tableBody.innerHTML = "";
-
-      data.forEach((person, index) => {
-        const row = `
-          <tr>
-            <td>${index + 1}</td>
-            <td>${person.name}</td>
-            <td>${person.phone}</td>
-            <td>${person.id}</td>
-            <td><button style="color: red;" onclick="deletePerson(${index})">❌</button></td>
-          </tr>`;
-        tableBody.innerHTML += row;
+    const reader = new FileReader();
+    reader.onload = async function () {
+      const result = await Tesseract.recognize(reader.result, "ara+eng", {
+        logger: (m) => {
+          if (m.status === "recognizing text") {
+            const progress = Math.round(m.progress * 100);
+            document.getElementById("progressBar").style.width = `${progress}%`;
+            document.getElementById("progressBar").innerText = `${progress}%`;
+          }
+        }
       });
 
-      localStorage.setItem("personsData", JSON.stringify(data));
-    }
+      const rows = result.data.text.split("\n");
 
-    function addPerson() {
-      const name = document.getElementById("name").value.trim();
-      const phone = document.getElementById("phone").value.trim();
-      const id = document.getElementById("id").value.trim();
+      rows.forEach(row => {
+        const columns = row.match(/^(.+?)\s+(\d+)\s+(B0.+)$/); // الاسم ثم رقم الهاتف ثم رقم التعريف
+        if (columns) {
+          data.push({
+            name: columns[1].trim(),
+            phone: columns[2].trim(),
+            id: columns[3].trim()
+          });
+        }
+      });
 
-      if (!name || !phone || !id) {
-        alert("يرجى ملء جميع الحقول!");
-        return;
-      }
-
-      data.push({ name, phone, id });
       renderTable();
-      document.getElementById("personForm").reset();
-    }
+      document.getElementById("progressBarContainer").style.display = "none";
+    };
+    reader.readAsDataURL(file);
+  }
 
-    function deletePerson(index) {
-      data.splice(index, 1);
-      renderTable();
-    }
-
-    function clearAll() {
-      if (confirm("هل أنت متأكد من حذف جميع البيانات؟")) {
-        data.length = 0;
-        renderTable();
-      }
-    }
-
-    function downloadExcel() {
-      const worksheet = XLSX.utils.json_to_sheet(data);
-      XLSX.utils.sheet_add_aoa(worksheet, [["#", "الاسم", "رقم الهاتف", "رقم التعريف"]], { origin: "A1" });
-      const workbook = XLSX.utils.book_new();
-      XLSX.utils.book_append_sheet(workbook, worksheet, "بيانات الأشخاص");
-      XLSX.writeFile(workbook, "persons_data.xlsx");
-    }
-
-    async function processImage() {
-      const fileInput = document.getElementById("uploadImage");
-      const file = fileInput.files[0];
-      if (!file) {
-        alert("يرجى تحميل صورة!");
-        return;
-      }
-
-      document.getElementById("progressBarContainer").style.display = "block";
-      document.getElementById("progressBar").style.width = "0%";
-      document.getElementById("progressBar").innerText = "0%";
-
-      const reader = new FileReader();
-      reader.onload = async function () {
-        const result = await Tesseract.recognize(reader.result, "ara+eng", {
-          logger: (m) => {
-            if (m.status === "recognizing text") {
-              const progress = Math.round(m.progress * 100);
-              document.getElementById("progressBar").style.width = `${progress}%`;
-              document.getElementById("progressBar").innerText = `${progress}%`;
-            }
-          }
-        });
-
-        const rows = result.data.text.split("\n");
-
-        rows.forEach(row => {
-          const columns = row.split(/\s+/);
-          if (columns.length >= 3) {
-            data.push({
-              name: columns[0].trim(),
-              phone: columns[1].trim(),
-              id: columns[2].trim()
-            });
-          }
-        });
-        renderTable();
-
-        document.getElementById("progressBarContainer").style.display = "none";
-      };
-      reader.readAsDataURL(file);
-    }
-
-    document.addEventListener("DOMContentLoaded", renderTable);
-  </script>
-</body>
-</html>
+  document.addEventListener("DOMContentLoaded", renderTable);
+</script>
