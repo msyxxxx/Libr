@@ -1,265 +1,178 @@
 <!DOCTYPE html>
-<html lang="ar">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>إدارة بيانات الأشخاص</title>
+  <title>منصة التعليم المباشر</title>
   <style>
     body {
+      font-family: Arial, sans-serif;
       margin: 0;
       padding: 0;
-      font-family: "Cairo", sans-serif;
-      background-color: #f0f0f5;
-      color: #333;
-      direction: rtl;
-      text-align: center;
     }
-
-    h1 {
-      font-size: 2.5rem;
-      color: #0077b6;
-      margin-top: 20px;
-      animation: fadeIn 1s ease-in-out;
-    }
-
-    form {
-      background: #ffffff;
-      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
-      border-radius: 15px;
-      padding: 25px;
-      width: 90%;
-      max-width: 500px;
-      margin: 20px auto;
-      animation: slideIn 0.8s ease-in-out;
-    }
-
-    input, button {
-      width: 100%;
-      padding: 14px;
-      margin: 10px 0;
-      font-size: 1rem;
-      border: 1px solid #ddd;
-      border-radius: 8px;
-      transition: all 0.3s ease;
-    }
-
-    input:focus {
-      border-color: #0077b6;
-      outline: none;
-      box-shadow: 0 0 5px rgba(0, 119, 182, 0.3);
-    }
-
-    button {
-      background-color: #0077b6;
-      color: #fff;
-      cursor: pointer;
-      border: none;
-      font-weight: bold;
-      transition: background 0.3s, transform 0.2s;
-    }
-
-    button:hover {
-      background-color: #005f8a;
-      transform: scale(1.02);
-    }
-
-    table {
-      width: 90%;
-      margin: 20px auto;
-      border-collapse: collapse;
-      background: #fff;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-      animation: fadeIn 1s ease-in-out;
-    }
-
-    th, td {
-      padding: 12px;
-      text-align: center;
-      border: 1px solid #ddd;
-    }
-
-    th {
-      background: #0077b6;
-      color: #fff;
-    }
-
-    tr:nth-child(even) {
-      background: #f0f0f5;
-    }
-
-    tr:hover {
-      background: #e3f2fd;
-    }
-
-    #progressBarContainer {
-      width: 80%;
-      margin: 20px auto;
-      background: #ddd;
-      border-radius: 20px;
-      height: 25px;
-      display: none;
-    }
-
-    #progressBar {
-      width: 0;
-      height: 100%;
-      background: #4caf50;
-      border-radius: 20px;
-      text-align: center;
+    header {
+      background-color: #007bff;
       color: white;
-      line-height: 25px;
-      font-weight: bold;
-      transition: width 0.3s ease;
+      text-align: center;
+      padding: 1rem;
     }
-
-    @keyframes fadeIn {
-      from { opacity: 0; }
-      to { opacity: 1; }
+    main {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 2rem;
+      padding: 1rem;
     }
-
-    @keyframes slideIn {
-      from { transform: translateY(-50px); opacity: 0; }
-      to { transform: translateY(0); opacity: 1; }
+    #stream-section {
+      text-align: center;
+    }
+    #live-stream {
+      width: 80%;
+      max-width: 600px;
+      border: 2px solid #007bff;
+      border-radius: 8px;
+    }
+    #controls button {
+      margin: 0.5rem;
+    }
+    #interaction-section ul,
+    #current-streams ul {
+      list-style: none;
+      padding: 0;
     }
   </style>
 </head>
 <body>
-  <h1>إدارة بيانات الأشخاص</h1>
+  <header>
+    <h1>منصة التعليم المباشر</h1>
+  </header>
+  <main>
+    <section id="stream-section">
+      <video id="live-stream" autoplay muted></video>
+      <div id="controls">
+        <input type="text" id="admin-key" placeholder="أدخل مفتاح المشرف">
+        <button id="start-stream">بدء البث</button>
+        <button id="stop-stream">إيقاف البث</button>
+      </div>
+    </section>
+    <section id="interaction-section">
+      <h2>التفاعل</h2>
+      <button id="raise-hand">رفع اليد</button>
+      <ul id="hands-list"></ul>
+    </section>
+    <section id="current-streams">
+      <h2>البثوص الحالية</h2>
+      <ul id="streams-list"></ul>
+    </section>
+  </main>
+  <script src="/socket.io/socket.io.js"></script>
+  <script>
+    const socket = io();
 
-  <form id="personForm">
-    <input type="text" id="name" placeholder="الاسم" required>
-<input type="tel" id="phone" inputmode="numeric" placeholder="رقم الهاتف" required>
-    <input type="text" id="id" placeholder="رقم التعريف (B0...)" required>
-    <button type="button" onclick="addPerson()">إضافة</button>
-  </form>
+    // عناصر الصفحة
+    const liveStream = document.getElementById('live-stream');
+    const startStreamBtn = document.getElementById('start-stream');
+    const stopStreamBtn = document.getElementById('stop-stream');
+    const raiseHandBtn = document.getElementById('raise-hand');
+    const adminKeyInput = document.getElementById('admin-key');
+    const handsList = document.getElementById('hands-list');
+    const streamsList = document.getElementById('streams-list');
 
-  <input type="file" id="uploadImage" accept="image/*" style="margin: 20px;">
-  <button onclick="processImage()">استخراج البيانات من الصورة</button>
+    const ADMIN_KEY = "12345"; // مفتاح المشرف الثابت
 
-  <div id="progressBarContainer">
-    <div id="progressBar">0%</div>
-  </div>
+    // التحكم بالبث
+    let mediaStream;
+    startStreamBtn.addEventListener('click', async () => {
+      if (adminKeyInput.value !== ADMIN_KEY) {
+        alert("مفتاح المشرف غير صحيح!");
+        return;
+      }
 
-  <table>
-    <thead>
-      <tr>
-        <th>الاسم</th>
-        <th>رقم الهاتف</th>
-        <th>رقم التعريف</th>
-        <th>حذف</th>
-      </tr>
-    </thead>
-    <tbody id="tableBody">
-      <!-- يتم إدراج البيانات هنا -->
-    </tbody>
-  </table>
+      mediaStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
+      liveStream.srcObject = mediaStream;
 
-  <button onclick="downloadExcel()">تحميل الجدول كملف Excel</button>
-  <button onclick="clearAll()">حذف جميع البيانات</button>
-
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/tesseract.js@4.0.2/dist/tesseract.min.js"></script>
-<script>
-  const data = JSON.parse(localStorage.getItem("personsData")) || [];
-
-  function renderTable() {
-    const tableBody = document.getElementById("tableBody");
-    tableBody.innerHTML = "";
-
-    data.forEach((person, index) => {
-      const row = `
-        <tr>
-          <td>${index + 1}</td>
-          <td>${person.name}</td>
-          <td>${person.phone}</td>
-          <td>${person.id}</td>
-          <td><button style="color: red;" onclick="deletePerson(${index})">❌</button></td>
-        </tr>`;
-      tableBody.innerHTML += row;
+      // إرسال البث للسيرفر
+      socket.emit('start-stream', 'بث مباشر جديد');
     });
 
-    localStorage.setItem("personsData", JSON.stringify(data));
-  }
+    stopStreamBtn.addEventListener('click', () => {
+      if (adminKeyInput.value !== ADMIN_KEY) {
+        alert("مفتاح المشرف غير صحيح!");
+        return;
+      }
 
-  function addPerson() {
-    const name = document.getElementById("name").value.trim();
-    const phone = document.getElementById("phone").value.trim();
-    const id = document.getElementById("id").value.trim();
+      if (mediaStream) {
+        mediaStream.getTracks().forEach(track => track.stop());
+        socket.emit('stop-stream');
+      }
+    });
 
-    if (!name || !phone || !id) {
-      alert("يرجى ملء جميع الحقول!");
-      return;
-    }
+    // رفع اليد
+    raiseHandBtn.addEventListener('click', () => {
+      socket.emit('raise-hand', 'طالب رفع اليد');
+    });
 
-    data.push({ name, phone, id });
-    renderTable();
-    document.getElementById("personForm").reset();
-  }
-
-  function deletePerson(index) {
-    data.splice(index, 1);
-    renderTable();
-  }
-
-  function clearAll() {
-    if (confirm("هل أنت متأكد من حذف جميع البيانات؟")) {
-      data.length = 0;
-      renderTable();
-    }
-  }
-
-  function downloadExcel() {
-    const worksheet = XLSX.utils.json_to_sheet(data);
-    XLSX.utils.sheet_add_aoa(worksheet, [["#", "الاسم", "رقم الهاتف", "رقم التعريف"]], { origin: "A1" });
-    const workbook = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(workbook, worksheet, "بيانات الأشخاص");
-    XLSX.writeFile(workbook, "persons_data.xlsx");
-  }
-
-  async function processImage() {
-    const fileInput = document.getElementById("uploadImage");
-    const file = fileInput.files[0];
-    if (!file) {
-      alert("يرجى تحميل صورة!");
-      return;
-    }
-
-    document.getElementById("progressBarContainer").style.display = "block";
-    document.getElementById("progressBar").style.width = "0%";
-    document.getElementById("progressBar").innerText = "0%";
-
-    const reader = new FileReader();
-    reader.onload = async function () {
-      const result = await Tesseract.recognize(reader.result, "ara+eng", {
-        logger: (m) => {
-          if (m.status === "recognizing text") {
-            const progress = Math.round(m.progress * 100);
-            document.getElementById("progressBar").style.width = `${progress}%`;
-            document.getElementById("progressBar").innerText = `${progress}%`;
-          }
-        }
+    // استقبال التحديثات
+    socket.on('update-hands', hands => {
+      handsList.innerHTML = '';
+      hands.forEach(hand => {
+        const li = document.createElement('li');
+        li.textContent = hand;
+        handsList.appendChild(li);
       });
+    });
 
-      const rows = result.data.text.split("\n");
-
-      rows.forEach(row => {
-        const columns = row.match(/^(.+?)\s+(\d+)\s+(B0.+)$/); // الاسم ثم رقم الهاتف ثم رقم التعريف
-        if (columns) {
-          data.push({
-            name: columns[1].trim(),
-            phone: columns[2].trim(),
-            id: columns[3].trim()
-          });
-        }
+    socket.on('update-streams', streams => {
+      streamsList.innerHTML = '';
+      streams.forEach(stream => {
+        const li = document.createElement('li');
+        li.textContent = stream;
+        streamsList.appendChild(li);
       });
-
-      renderTable();
-      document.getElementById("progressBarContainer").style.display = "none";
-    };
-    reader.readAsDataURL(file);
-  }
-
-  document.addEventListener("DOMContentLoaded", renderTable);
-</script>
+    });
+  </script>
 </body>
 </html>
+
+<!-- server.js -->
+<script type="module">
+  import express from "express";
+  import { createServer } from "http";
+  import { Server } from "socket.io";
+
+  const app = express();
+  const server = createServer(app);
+  const io = new Server(server);
+
+  let hands = [];
+  let streams = [];
+
+  app.use(express.static("."));
+
+  io.on("connection", (socket) => {
+    console.log("مستخدم متصل");
+
+    socket.on("start-stream", (streamName) => {
+      streams.push(streamName);
+      io.emit("update-streams", streams);
+    });
+
+    socket.on("stop-stream", () => {
+      streams = [];
+      io.emit("update-streams", streams);
+    });
+
+    socket.on("raise-hand", (hand) => {
+      hands.push(hand);
+      io.emit("update-hands", hands);
+    });
+
+    socket.on("disconnect", () => {
+      console.log("مستخدم غادر");
+    });
+  });
+
+  server.listen(3000, () => {
+    console.log("الخادم يعمل على المنفذ 3000");
+  });
+</script>
