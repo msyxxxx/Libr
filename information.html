@@ -1,178 +1,153 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>منصة التعليم المباشر</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      margin: 0;
-      padding: 0;
-    }
-    header {
-      background-color: #007bff;
-      color: white;
-      text-align: center;
-      padding: 1rem;
-    }
-    main {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 2rem;
-      padding: 1rem;
-    }
-    #stream-section {
-      text-align: center;
-    }
-    #live-stream {
-      width: 80%;
-      max-width: 600px;
-      border: 2px solid #007bff;
-      border-radius: 8px;
-    }
-    #controls button {
-      margin: 0.5rem;
-    }
-    #interaction-section ul,
-    #current-streams ul {
-      list-style: none;
-      padding: 0;
-    }
-  </style>
-</head>
-<body>
-  <header>
-    <h1>منصة التعليم المباشر</h1>
-  </header>
-  <main>
-    <section id="stream-section">
-      <video id="live-stream" autoplay muted></video>
-      <div id="controls">
-        <input type="text" id="admin-key" placeholder="أدخل مفتاح المشرف">
-        <button id="start-stream">بدء البث</button>
-        <button id="stop-stream">إيقاف البث</button>
+const express = require("express");
+const { Server } = require("socket.io");
+const http = require("http");
+
+const app = express();
+const server = http.createServer(app);
+const io = new Server(server);
+
+let streams = []; // قائمة البثوث الحالية
+let participants = []; // قائمة المشاركين الذين يرفعون أيديهم
+
+// تقديم صفحة الويب والملفات المدمجة
+app.get("/", (req, res) => {
+  res.send(`
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>Live Classroom</title>
+      <style>
+        body {
+          font-family: Arial, sans-serif;
+          margin: 0; padding: 0;
+          background-color: #f9f9f9;
+          color: #333;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+        }
+        header {
+          background-color: #4CAF50;
+          color: white;
+          padding: 15px;
+          width: 100%;
+          text-align: center;
+        }
+        #video-container {
+          margin: 20px 0;
+          width: 80%;
+          max-width: 800px;
+          border: 2px solid #4CAF50;
+          padding: 10px;
+          background: black;
+        }
+        #participants-list {
+          margin: 20px;
+          list-style: none;
+          padding: 0;
+        }
+        button {
+          padding: 10px 20px;
+          margin: 10px;
+          background-color: #4CAF50;
+          color: white;
+          border: none;
+          border-radius: 5px;
+          cursor: pointer;
+        }
+        button:hover {
+          background-color: #45a049;
+        }
+      </style>
+    </head>
+    <body>
+      <header>
+        <h1>Live Classroom</h1>
+      </header>
+      <div id="video-container">
+        <p style="color:white; text-align:center;">Live Stream will appear here</p>
       </div>
-    </section>
-    <section id="interaction-section">
-      <h2>التفاعل</h2>
-      <button id="raise-hand">رفع اليد</button>
-      <ul id="hands-list"></ul>
-    </section>
-    <section id="current-streams">
-      <h2>البثوص الحالية</h2>
-      <ul id="streams-list"></ul>
-    </section>
-  </main>
-  <script src="/socket.io/socket.io.js"></script>
-  <script>
-    const socket = io();
+      <div>
+        <button id="start-stream">Start Stream</button>
+        <button id="stop-stream">Stop Stream</button>
+      </div>
+      <div>
+        <h2>Participants raising hands:</h2>
+        <ul id="participants-list"></ul>
+      </div>
+      <script src="/socket.io/socket.io.js"></script>
+      <script>
+        const socket = io();
 
-    // عناصر الصفحة
-    const liveStream = document.getElementById('live-stream');
-    const startStreamBtn = document.getElementById('start-stream');
-    const stopStreamBtn = document.getElementById('stop-stream');
-    const raiseHandBtn = document.getElementById('raise-hand');
-    const adminKeyInput = document.getElementById('admin-key');
-    const handsList = document.getElementById('hands-list');
-    const streamsList = document.getElementById('streams-list');
+        const startStreamBtn = document.getElementById('start-stream');
+        const stopStreamBtn = document.getElementById('stop-stream');
+        const participantsList = document.getElementById('participants-list');
 
-    const ADMIN_KEY = "12345"; // مفتاح المشرف الثابت
+        // بدء البث
+        startStreamBtn.addEventListener('click', () => {
+          socket.emit('start-stream', { admin: true });
+          alert('Stream started!');
+        });
 
-    // التحكم بالبث
-    let mediaStream;
-    startStreamBtn.addEventListener('click', async () => {
-      if (adminKeyInput.value !== ADMIN_KEY) {
-        alert("مفتاح المشرف غير صحيح!");
-        return;
-      }
+        // إيقاف البث
+        stopStreamBtn.addEventListener('click', () => {
+          socket.emit('stop-stream');
+          alert('Stream stopped!');
+        });
 
-      mediaStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
-      liveStream.srcObject = mediaStream;
+        // تحديث قائمة المشاركين
+        socket.on('update-participants', (participants) => {
+          participantsList.innerHTML = '';
+          participants.forEach((p) => {
+            const li = document.createElement('li');
+            li.textContent = p.name;
+            participantsList.appendChild(li);
+          });
+        });
+      </script>
+    </body>
+    </html>
+  `);
+});
 
-      // إرسال البث للسيرفر
-      socket.emit('start-stream', 'بث مباشر جديد');
-    });
+// WebSocket إدارة
+io.on("connection", (socket) => {
+  console.log(`User connected: ${socket.id}`);
 
-    stopStreamBtn.addEventListener('click', () => {
-      if (adminKeyInput.value !== ADMIN_KEY) {
-        alert("مفتاح المشرف غير صحيح!");
-        return;
-      }
-
-      if (mediaStream) {
-        mediaStream.getTracks().forEach(track => track.stop());
-        socket.emit('stop-stream');
-      }
-    });
-
-    // رفع اليد
-    raiseHandBtn.addEventListener('click', () => {
-      socket.emit('raise-hand', 'طالب رفع اليد');
-    });
-
-    // استقبال التحديثات
-    socket.on('update-hands', hands => {
-      handsList.innerHTML = '';
-      hands.forEach(hand => {
-        const li = document.createElement('li');
-        li.textContent = hand;
-        handsList.appendChild(li);
-      });
-    });
-
-    socket.on('update-streams', streams => {
-      streamsList.innerHTML = '';
-      streams.forEach(stream => {
-        const li = document.createElement('li');
-        li.textContent = stream;
-        streamsList.appendChild(li);
-      });
-    });
-  </script>
-</body>
-</html>
-
-<!-- server.js -->
-<script type="module">
-  import express from "express";
-  import { createServer } from "http";
-  import { Server } from "socket.io";
-
-  const app = express();
-  const server = createServer(app);
-  const io = new Server(server);
-
-  let hands = [];
-  let streams = [];
-
-  app.use(express.static("."));
-
-  io.on("connection", (socket) => {
-    console.log("مستخدم متصل");
-
-    socket.on("start-stream", (streamName) => {
-      streams.push(streamName);
-      io.emit("update-streams", streams);
-    });
-
-    socket.on("stop-stream", () => {
-      streams = [];
-      io.emit("update-streams", streams);
-    });
-
-    socket.on("raise-hand", (hand) => {
-      hands.push(hand);
-      io.emit("update-hands", hands);
-    });
-
-    socket.on("disconnect", () => {
-      console.log("مستخدم غادر");
-    });
+  // بدء البث
+  socket.on("start-stream", (data) => {
+    streams.push({ id: socket.id, admin: data.admin });
+    io.emit("stream-started", streams);
+    console.log("Stream started by:", socket.id);
   });
 
-  server.listen(3000, () => {
-    console.log("الخادم يعمل على المنفذ 3000");
+  // إيقاف البث
+  socket.on("stop-stream", () => {
+    streams = streams.filter((s) => s.id !== socket.id);
+    io.emit("stream-stopped");
+    console.log("Stream stopped by:", socket.id);
   });
-</script>
+
+  // إضافة مشارك
+  socket.on("raise-hand", (data) => {
+    participants.push({ id: socket.id, name: data.name });
+    io.emit("update-participants", participants);
+    console.log(`${data.name} raised hand`);
+  });
+
+  // إزالة مشارك عند قطع الاتصال
+  socket.on("disconnect", () => {
+    streams = streams.filter((s) => s.id !== socket.id);
+    participants = participants.filter((p) => p.id !== socket.id);
+    io.emit("update-participants", participants);
+    console.log(`User disconnected: ${socket.id}`);
+  });
+});
+
+// تشغيل الخادم
+const PORT = 3000;
+server.listen(PORT, () => {
+  console.log(`Server running on http://localhost:${PORT}`);
+});
