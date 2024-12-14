@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>جُحا - Jou7A</title>
   <style>
-    /* التصميم الأساسي */
     body {
       font-family: Arial, sans-serif;
       margin: 0;
@@ -64,8 +63,8 @@
       border-top: 1px solid #ddd;
     }
 
-    .input-box input {
-      flex-grow: 1;
+    .input-box select,
+    .input-box button {
       padding: 10px;
       border: 1px solid #ddd;
       border-radius: 8px;
@@ -74,9 +73,6 @@
     .input-box button {
       background: #6200ea;
       color: white;
-      border: none;
-      padding: 10px 15px;
-      border-radius: 8px;
       cursor: pointer;
       transition: background 0.3s;
     }
@@ -116,47 +112,37 @@
     <header>جُحا - Jou7A</header>
     <div class="chat-box" id="chatBox"></div>
     <div class="input-box">
-      <input type="text" id="userInput" placeholder="اكتب طلبك هنا...">
+      <select id="specialization">
+        <option value="FC">FC</option>
+        <option value="BA">BA</option>
+        <option value="GRH">GRH</option>
+        <option value="ECO">ECO</option>
+        <option value="Droit">Droit</option>
+      </select>
+      <select id="category">
+        <option value="Cours">Cours</option>
+        <option value="TD">TD</option>
+        <option value="Archive">Archive</option>
+      </select>
       <button id="sendButton">إرسال</button>
     </div>
   </div>
 
   <script>
-    // بيانات الملفات حسب التخصصات
-    const fileData = {
-      FC: {
-        Cours: ["statistique_FC.pdf", "Comptabilitè_FC.pdf", "principe_FC.pdf","Math_FC.pdf", "Droit_FC.pdf", "l'économie_FC.pdf","Techniques de communication_FC.pdf", "MTU_FC.pdf","Anglais_FC.pdf"],
-        TD: ["TD1_FC.pdf", "TD2_FC.pdf","TD3_FC.pdf", "TD4_FC.pdf","TD5_FC.pdf", "TD6_FC.pdf","TD7_FC.pdf", "TD8_FC.pdf","TD9_FC.pdf", "TD10_FC.pdf"],
-        Archive: ["Archive1_FC.pdf", "Archive2_FC.pdf","Archive3_FC.pdf"]
-      },
-      BA: {
-        Cours: ["Cours1_BA.pdf", "Cours2_BA.pdf"],
-        TD: ["TD1_BA.pdf", "TD2_BA.pdf"],
-        Archive: ["Archive1_BA.pdf", "Archive2_BA.pdf"]
-      },
-      GRH: {
-        Cours: ["Cours1_GRH.pdf", "Cours2_GRH.pdf"],
-        TD: ["TD1_GRH.pdf", "TD2_GRH.pdf"],
-        Archive: ["Archive1_GRH.pdf", "Archive2_GRH.pdf"]
-      },
-      ECO: {
-        Cours: ["Micro_ECO.pdf", "Macro_ECO.pdf","comptabilitè_ECO.pdf", "math_ECO.pdf"],
-        TD: ["TD1_ECO.pdf", "TD2_ECO.pdf","TD3_ECO.pdf", "TD4_ECO.pdf","TD5_ECO.pdf", "TD6_ECO.pdf"],
-        Archive: ["Archive1_ECO.pdf", "Archive2_ECO.pdf","Archive3_ECO.pdf", "Archive4_ECO.pdf"]
-      },
-      Droit: {
-        Cours: ["Cours1_Droit.pdf", "Cours2_Droit.pdf"],
-        TD: ["TD1_Droit.pdf", "TD2_Droit.pdf"],
-        Archive: ["Archive1_Droit.pdf", "Archive2_Droit.pdf"]
-      }
-    };
-
-    // عناصر الصفحة
+    const githubRepoUrl = "https://raw.githubusercontent.com/اسم-المستخدم/اسم-المستودع/فرع/m";
     const chatBox = document.getElementById("chatBox");
-    const userInput = document.getElementById("userInput");
+    const specialization = document.getElementById("specialization");
+    const category = document.getElementById("category");
     const sendButton = document.getElementById("sendButton");
 
-    // إضافة رسالة جديدة
+    const fileData = {
+      FC: { Cours: ["statistique_FC.pdf", "Comptabilitè_FC.pdf", "principe_FC.pdf", "Math_FC.pdf"], TD: ["TD1_FC.pdf"], Archive: ["Archive1_FC.pdf"] },
+      BA: { Cours: ["Cours1_BA.pdf"], TD: ["TD1_BA.pdf"], Archive: ["Archive1_BA.pdf"] },
+      GRH: { Cours: ["Cours1_GRH.pdf"], TD: ["TD1_GRH.pdf"], Archive: ["Archive1_GRH.pdf"] },
+      ECO: { Cours: ["Micro_ECO.pdf"], TD: ["TD1_ECO.pdf"], Archive: ["Archive1_ECO.pdf"] },
+      Droit: { Cours: ["Cours1_Droit.pdf"], TD: ["TD1_Droit.pdf"], Archive: ["Archive1_Droit.pdf"] }
+    };
+
     function addMessage(text, isUser = false) {
       const messageDiv = document.createElement("div");
       messageDiv.className = `message ${isUser ? "user" : ""}`;
@@ -165,50 +151,30 @@
       chatBox.scrollTop = chatBox.scrollHeight;
     }
 
-    // عرض الملفات للمستخدم
-    function displayFiles(files) {
+    function displayFiles(specialization, category) {
+      const files = fileData[specialization][category] || [];
+      if (files.length === 0) {
+        addMessage("لا توجد ملفات متوفرة لهذا القسم والفئة.");
+        return;
+      }
+
       files.forEach(file => {
         const fileDiv = document.createElement("div");
         fileDiv.className = "file-item";
+        const fileUrl = `${githubRepoUrl}/${specialization}/${category}/${file}`;
         fileDiv.innerHTML = `
           <span>${file}</span>
-          <button onclick="downloadFile('${file}')">تنزيل</button>
+          <a href="${fileUrl}" download="${file}" target="_blank"><button>تنزيل</button></a>
         `;
         chatBox.appendChild(fileDiv);
       });
-      chatBox.scrollTop = chatBox.scrollHeight;
     }
 
-    // محاكاة تنزيل الملفات
-    function downloadFile(fileName) {
-      alert(`جارٍ تنزيل ${fileName}`);
-    }
-
-    // تحليل النص واستجابة البوت
-    function processRequest(input) {
-      const [specialization, category] = input.split(" ");
-      if (fileData[specialization] && fileData[specialization][category]) {
-        addMessage(`الملفات المتوفرة في ${specialization} - ${category}:`);
-        displayFiles(fileData[specialization][category]);
-      } else {
-        addMessage("عذرًا، لم يتم العثور على نتائج للطلب.");
-      }
-    }
-
-    // عند الضغط على زر الإرسال
     sendButton.addEventListener("click", () => {
-      const userText = userInput.value.trim();
-      if (!userText) return;
-      addMessage(userText, true);
-      userInput.value = "";
-      processRequest(userText);
-    });
-
-    // إرسال الطلب عند الضغط على Enter
-    userInput.addEventListener("keypress", (e) => {
-      if (e.key === "Enter") {
-        sendButton.click();
-      }
+      const selectedSpecialization = specialization.value;
+      const selectedCategory = category.value;
+      addMessage(`طلبت الملفات لـ ${selectedSpecialization} - ${selectedCategory}`, true);
+      displayFiles(selectedSpecialization, selectedCategory);
     });
   </script>
 </body>
