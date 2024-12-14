@@ -128,80 +128,77 @@
     </div>
   </div>
 
-  <script>
-    const serverBaseUrl = "path/to/your/files"; // ضع هنا مسار المجلد على الخادم
-    const chatBox = document.getElementById("chatBox");
-    const specialization = document.getElementById("specialization");
-    const category = document.getElementById("category");
-    const sendButton = document.getElementById("sendButton");
+<script>
+  const serverBaseUrl = "/files"; // ضع هنا مسار المجلد على الخادم
+  const chatBox = document.getElementById("chatBox");
+  const specialization = document.getElementById("specialization");
+  const category = document.getElementById("category");
+  const sendButton = document.getElementById("sendButton");
 
-    const fileData = {
-      FC: { Cours: ["statistique_FC.pdf", "Comptabilitè_FC.pdf", "principe_FC.pdf", "Math_FC.pdf"], TD: ["TD1_FC.pdf"], Archive: ["Archive1_FC.pdf"] },
-      BA: { Cours: ["Cours1_BA.pdf"], TD: ["TD1_BA.pdf"], Archive: ["Archive1_BA.pdf"] },
-      GRH: { Cours: ["Cours1_GRH.pdf"], TD: ["TD1_GRH.pdf"], Archive: ["Archive1_GRH.pdf"] },
-      ECO: { Cours: ["Micro_ECO.pdf"], TD: ["TD1_ECO.pdf"], Archive: ["Archive1_ECO.pdf"] },
-      Droit: { Cours: ["Cours1_Droit.pdf"], TD: ["TD1_Droit.pdf"], Archive: ["Archive1_Droit.pdf"] }
-    };
+  const fileData = {
+    FC: { Cours: ["statistique_FC.pdf", "Comptabilitè_FC.pdf", "principe_FC.pdf", "Math_FC.pdf"], TD: ["TD1_FC.pdf"], Archive: ["Archive1_FC.pdf"] },
+    BA: { Cours: ["Cours1_BA.pdf"], TD: ["TD1_BA.pdf"], Archive: ["Archive1_BA.pdf"] },
+    GRH: { Cours: ["Cours1_GRH.pdf"], TD: ["TD1_GRH.pdf"], Archive: ["Archive1_GRH.pdf"] },
+    ECO: { Cours: ["Micro_ECO.pdf"], TD: ["TD1_ECO.pdf"], Archive: ["Archive1_ECO.pdf"] },
+    Droit: { Cours: ["Cours1_Droit.pdf"], TD: ["TD1_Droit.pdf"], Archive: ["Archive1_Droit.pdf"] }
+  };
 
-    function addMessage(text, isUser = false) {
-      const messageDiv = document.createElement("div");
-      messageDiv.className = `message ${isUser ? "user" : ""}`;
-      messageDiv.textContent = text;
-      chatBox.appendChild(messageDiv);
-      chatBox.scrollTop = chatBox.scrollHeight;
-    }
+  function addMessage(text, isUser = false) {
+    const messageDiv = document.createElement("div");
+    messageDiv.className = `message ${isUser ? "user" : ""}`;
+    messageDiv.textContent = text;
+    chatBox.appendChild(messageDiv);
+    chatBox.scrollTop = chatBox.scrollHeight;
+  }
 
-    function downloadFile(filePath, fileName) {
-      fetch(filePath)
-        .then(response => {
-          if (!response.ok) {
-            throw new Error("File not found");
-          }
-          return response.blob();
-        })
-        .then(blob => {
-          const url = URL.createObjectURL(blob);
-          const a = document.createElement("a");
-          a.href = url;
-          a.download = fileName;
-          document.body.appendChild(a);
-          a.click();
-          document.body.removeChild(a);
-          URL.revokeObjectURL(url);
-        })
-        .catch(() => {
-          addMessage(`⚠️ الملف ${fileName} غير موجود.`);
-        });
-    }
-
-    function displayFiles(specialization, category) {
-      const files = fileData[specialization][category] || [];
-      if (files.length === 0) {
-        addMessage("لا توجد ملفات متوفرة لهذا القسم والفئة.");
-        return;
-      }
-
-      files.forEach(file => {
-        const fileDiv = document.createElement("div");
-        fileDiv.className = "file-item";
-        const fileUrl = `${serverBaseUrl}/${specialization}/${category}/${file}`;
-        fileDiv.innerHTML = `
-          <span>${file}</span>
-          <button>تنزيل</button>
-        `;
-        fileDiv.querySelector("button").addEventListener("click", () => {
-          downloadFile(fileUrl, file);
-        });
-        chatBox.appendChild(fileDiv);
+  function downloadFile(filePath, fileName) {
+    // التأكد من وجود الملف أولاً
+    fetch(filePath, { method: "HEAD" }) // نتحقق فقط من وجود الملف
+      .then(response => {
+        if (!response.ok) {
+          throw new Error("File not found");
+        }
+        // إذا كان الملف موجودًا، نتابع التنزيل
+        const a = document.createElement("a");
+        a.href = filePath;
+        a.download = fileName;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+      })
+      .catch(() => {
+        addMessage(`⚠️ الملف ${fileName} غير موجود على الخادم.`);
       });
+  }
+
+  function displayFiles(specialization, category) {
+    const files = fileData[specialization][category] || [];
+    if (files.length === 0) {
+      addMessage("لا توجد ملفات متوفرة لهذا القسم والفئة.");
+      return;
     }
 
-    sendButton.addEventListener("click", () => {
-      const selectedSpecialization = specialization.value;
-      const selectedCategory = category.value;
-      addMessage(`طلبت الملفات لـ ${selectedSpecialization} - ${selectedCategory}`, true);
-      displayFiles(selectedSpecialization, selectedCategory);
+    files.forEach(file => {
+      const fileDiv = document.createElement("div");
+      fileDiv.className = "file-item";
+      const fileUrl = `${serverBaseUrl}/${specialization}/${category}/${file}`;
+      fileDiv.innerHTML = `
+        <span>${file}</span>
+        <button>تنزيل</button>
+      `;
+      fileDiv.querySelector("button").addEventListener("click", () => {
+        downloadFile(fileUrl, file);
+      });
+      chatBox.appendChild(fileDiv);
     });
-  </script>
+  }
+
+  sendButton.addEventListener("click", () => {
+    const selectedSpecialization = specialization.value;
+    const selectedCategory = category.value;
+    addMessage(`طلبت الملفات لـ ${selectedSpecialization} - ${selectedCategory}`, true);
+    displayFiles(selectedSpecialization, selectedCategory);
+  });
+</script>
 </body>
 </html>
