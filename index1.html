@@ -129,19 +129,19 @@
   </div>
 
   <script>
-    const serverBaseUrl = "https://your-server-url.com/files"; // استبدل بـ عنوان الخادم حيث توجد الملفات
+    const serverBaseUrl = "path/to/your/files"; // ضع هنا مسار المجلد على الخادم
+    const chatBox = document.getElementById("chatBox");
+    const specialization = document.getElementById("specialization");
+    const category = document.getElementById("category");
+    const sendButton = document.getElementById("sendButton");
+
     const fileData = {
-      FC: { Cours: ["statistique_FC.pdf", "Comptabilitè_FC.pdf"], TD: ["TD1_FC.pdf"], Archive: ["Archive1_FC.pdf"] },
+      FC: { Cours: ["statistique_FC.pdf", "Comptabilitè_FC.pdf", "principe_FC.pdf", "Math_FC.pdf"], TD: ["TD1_FC.pdf"], Archive: ["Archive1_FC.pdf"] },
       BA: { Cours: ["Cours1_BA.pdf"], TD: ["TD1_BA.pdf"], Archive: ["Archive1_BA.pdf"] },
       GRH: { Cours: ["Cours1_GRH.pdf"], TD: ["TD1_GRH.pdf"], Archive: ["Archive1_GRH.pdf"] },
       ECO: { Cours: ["Micro_ECO.pdf"], TD: ["TD1_ECO.pdf"], Archive: ["Archive1_ECO.pdf"] },
       Droit: { Cours: ["Cours1_Droit.pdf"], TD: ["TD1_Droit.pdf"], Archive: ["Archive1_Droit.pdf"] }
     };
-
-    const chatBox = document.getElementById("chatBox");
-    const specialization = document.getElementById("specialization");
-    const category = document.getElementById("category");
-    const sendButton = document.getElementById("sendButton");
 
     function addMessage(text, isUser = false) {
       const messageDiv = document.createElement("div");
@@ -151,8 +151,8 @@
       chatBox.scrollTop = chatBox.scrollHeight;
     }
 
-    function downloadFile(fileUrl, fileName) {
-      fetch(fileUrl)
+    function downloadFile(filePath, fileName) {
+      fetch(filePath)
         .then(response => {
           if (!response.ok) {
             throw new Error("File not found");
@@ -170,7 +170,7 @@
           URL.revokeObjectURL(url);
         })
         .catch(() => {
-          addMessage(`فشل تنزيل الملف: ${fileName}`);
+          addMessage(`⚠️ الملف ${fileName} غير موجود.`);
         });
     }
 
