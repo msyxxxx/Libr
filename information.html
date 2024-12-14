@@ -1,1 +1,215 @@
-<html></html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>جُحا - Jou7A</title>
+  <style>
+    /* التصميم الأساسي */
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background: #f4f4f9;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 700px;
+      background: white;
+      border-radius: 10px;
+      box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+      overflow: hidden;
+    }
+
+    header {
+      background: #6200ea;
+      color: white;
+      padding: 20px;
+      text-align: center;
+      font-size: 1.5rem;
+    }
+
+    .chat-box {
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+      max-height: 400px;
+      overflow-y: auto;
+      background: #f9f9f9;
+    }
+
+    .message {
+      padding: 10px 15px;
+      border-radius: 8px;
+      background: #e0e0e0;
+      margin-bottom: 10px;
+    }
+
+    .message.user {
+      background: #d1c4e9;
+      text-align: right;
+    }
+
+    .input-box {
+      display: flex;
+      gap: 10px;
+      padding: 10px;
+      background: #fff;
+      border-top: 1px solid #ddd;
+    }
+
+    .input-box input {
+      flex-grow: 1;
+      padding: 10px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+    }
+
+    .input-box button {
+      background: #6200ea;
+      color: white;
+      border: none;
+      padding: 10px 15px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+
+    .input-box button:hover {
+      background: #3700b3;
+    }
+
+    .file-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      margin-top: 5px;
+      background: white;
+    }
+
+    .file-item button {
+      background: #6200ea;
+      color: white;
+      border: none;
+      padding: 5px 10px;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+
+    .file-item button:hover {
+      background: #3700b3;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>جُحا - Jou7A</header>
+    <div class="chat-box" id="chatBox"></div>
+    <div class="input-box">
+      <input type="text" id="userInput" placeholder="اكتب طلبك هنا...">
+      <button id="sendButton">إرسال</button>
+    </div>
+  </div>
+
+  <script>
+    // بيانات الملفات حسب التخصصات
+    const fileData = {
+      FC: {
+        Cours: ["statistique_FC.pdf", "Comptabilitè_FC.pdf", "principe_FC.pdf","Math_FC.pdf", "Droit_FC.pdf", "l'économie_FC.pdf","Techniques de communication_FC.pdf", "MTU_FC.pdf","Anglais_FC.pdf"],
+        TD: ["TD1_FC.pdf", "TD2_FC.pdf","TD3_FC.pdf", "TD4_FC.pdf","TD5_FC.pdf", "TD6_FC.pdf","TD7_FC.pdf", "TD8_FC.pdf","TD9_FC.pdf", "TD10_FC.pdf"],
+        Archive: ["Archive1_FC.pdf", "Archive2_FC.pdf","Archive3_FC.pdf"]
+      },
+      BA: {
+        Cours: ["Cours1_BA.pdf", "Cours2_BA.pdf"],
+        TD: ["TD1_BA.pdf", "TD2_BA.pdf"],
+        Archive: ["Archive1_BA.pdf", "Archive2_BA.pdf"]
+      },
+      GRH: {
+        Cours: ["Cours1_GRH.pdf", "Cours2_GRH.pdf"],
+        TD: ["TD1_GRH.pdf", "TD2_GRH.pdf"],
+        Archive: ["Archive1_GRH.pdf", "Archive2_GRH.pdf"]
+      },
+      ECO: {
+        Cours: ["Micro_ECO.pdf", "Macro_ECO.pdf","comptabilitè_ECO.pdf", "math_ECO.pdf"],
+        TD: ["TD1_ECO.pdf", "TD2_ECO.pdf","TD3_ECO.pdf", "TD4_ECO.pdf","TD5_ECO.pdf", "TD6_ECO.pdf"],
+        Archive: ["Archive1_ECO.pdf", "Archive2_ECO.pdf","Archive3_ECO.pdf", "Archive4_ECO.pdf"]
+      },
+      Droit: {
+        Cours: ["Cours1_Droit.pdf", "Cours2_Droit.pdf"],
+        TD: ["TD1_Droit.pdf", "TD2_Droit.pdf"],
+        Archive: ["Archive1_Droit.pdf", "Archive2_Droit.pdf"]
+      }
+    };
+
+    // عناصر الصفحة
+    const chatBox = document.getElementById("chatBox");
+    const userInput = document.getElementById("userInput");
+    const sendButton = document.getElementById("sendButton");
+
+    // إضافة رسالة جديدة
+    function addMessage(text, isUser = false) {
+      const messageDiv = document.createElement("div");
+      messageDiv.className = `message ${isUser ? "user" : ""}`;
+      messageDiv.textContent = text;
+      chatBox.appendChild(messageDiv);
+      chatBox.scrollTop = chatBox.scrollHeight;
+    }
+
+    // عرض الملفات للمستخدم
+    function displayFiles(files) {
+      files.forEach(file => {
+        const fileDiv = document.createElement("div");
+        fileDiv.className = "file-item";
+        fileDiv.innerHTML = `
+          <span>${file}</span>
+          <button onclick="downloadFile('${file}')">تنزيل</button>
+        `;
+        chatBox.appendChild(fileDiv);
+      });
+      chatBox.scrollTop = chatBox.scrollHeight;
+    }
+
+    // محاكاة تنزيل الملفات
+    function downloadFile(fileName) {
+      alert(`جارٍ تنزيل ${fileName}`);
+    }
+
+    // تحليل النص واستجابة البوت
+    function processRequest(input) {
+      const [specialization, category] = input.split(" ");
+      if (fileData[specialization] && fileData[specialization][category]) {
+        addMessage(`الملفات المتوفرة في ${specialization} - ${category}:`);
+        displayFiles(fileData[specialization][category]);
+      } else {
+        addMessage("عذرًا، لم يتم العثور على نتائج للطلب.");
+      }
+    }
+
+    // عند الضغط على زر الإرسال
+    sendButton.addEventListener("click", () => {
+      const userText = userInput.value.trim();
+      if (!userText) return;
+      addMessage(userText, true);
+      userInput.value = "";
+      processRequest(userText);
+    });
+
+    // إرسال الطلب عند الضغط على Enter
+    userInput.addEventListener("keypress", (e) => {
+      if (e.key === "Enter") {
+        sendButton.click();
+      }
+    });
+  </script>
+</body>
+</html>
