@@ -129,12 +129,6 @@
   </div>
 
   <script>
-    const githubRepoUrl = "https://raw.githubusercontent.com/اسم-المستخدم/اسم-المستودع/فرع/m";
-    const chatBox = document.getElementById("chatBox");
-    const specialization = document.getElementById("specialization");
-    const category = document.getElementById("category");
-    const sendButton = document.getElementById("sendButton");
-
     const fileData = {
       FC: { Cours: ["statistique_FC.pdf", "Comptabilitè_FC.pdf", "principe_FC.pdf", "Math_FC.pdf"], TD: ["TD1_FC.pdf"], Archive: ["Archive1_FC.pdf"] },
       BA: { Cours: ["Cours1_BA.pdf"], TD: ["TD1_BA.pdf"], Archive: ["Archive1_BA.pdf"] },
@@ -143,12 +137,29 @@
       Droit: { Cours: ["Cours1_Droit.pdf"], TD: ["TD1_Droit.pdf"], Archive: ["Archive1_Droit.pdf"] }
     };
 
+    const chatBox = document.getElementById("chatBox");
+    const specialization = document.getElementById("specialization");
+    const category = document.getElementById("category");
+    const sendButton = document.getElementById("sendButton");
+
     function addMessage(text, isUser = false) {
       const messageDiv = document.createElement("div");
       messageDiv.className = `message ${isUser ? "user" : ""}`;
       messageDiv.textContent = text;
       chatBox.appendChild(messageDiv);
       chatBox.scrollTop = chatBox.scrollHeight;
+    }
+
+    function downloadFile(fileName, content) {
+      const blob = new Blob([content], { type: "application/pdf" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = fileName;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
     }
 
     function displayFiles(specialization, category) {
@@ -161,11 +172,15 @@
       files.forEach(file => {
         const fileDiv = document.createElement("div");
         fileDiv.className = "file-item";
-        const fileUrl = `${githubRepoUrl}/${specialization}/${category}/${file}`;
         fileDiv.innerHTML = `
           <span>${file}</span>
-          <a href="${fileUrl}" download="${file}" target="_blank"><button>تنزيل</button></a>
+          <button>تنزيل</button>
         `;
+        fileDiv.querySelector("button").addEventListener("click", () => {
+          // هنا يجب وضع محتوى الملف الفعلي لجعله قابلاً للتنزيل
+          const dummyContent = "هذا محتوى تجريبي للملف " + file;
+          downloadFile(file, dummyContent);
+        });
         chatBox.appendChild(fileDiv);
       });
     }
