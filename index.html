@@ -8,45 +8,125 @@
         /* إعدادات عامة للصفحة */
         body {
             margin: 0;
-            font-family: Arial, sans-serif;
-            color: #ffffff;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
             min-height: 100vh;
             overflow: hidden;
-            position: relative;
-            background: #3D4D55;
+            background-color: #000;
         }
 
-        /* خلفية المعادلات */
-        .equation {
+        /* طبقة النقاط */
+        .dots-container {
             position: absolute;
-            font-size: 24px;
-            opacity: 0;
-            animation: fade 1s infinite;
-            white-space: nowrap;
-            color: rgba(255, 255, 255, 0.7);
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: 0;
         }
 
-        @keyframes fade {
-            0%, 100% { opacity: 0; }
-            50% { opacity: 1; }
+        .dot {
+            position: absolute;
+            width: 10px;
+            height: 600px;
+            background-color: #808080;
+            border-radius: 50%;
+            animation: move 2s infinite alternate;
+            opacity: 0.5;
         }
 
-        /* إعدادات الشريط الجانبي */
+        @keyframes move {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(20px); }
+        }
+
+        /* طبقة الأزرار */
+        .button-container {
+            position: relative;
+            z-index: 10;
+        }
+
+        .button {
+            position: relative;
+            background: linear-gradient(45deg, #6a11cb, #2575fc);
+            color: #fff;
+            padding: 15px 30px;
+            margin: 15px 0;
+            border: none;
+            border-radius: 30px;
+            font-size: 12px;
+            font-weight: bold;
+            cursor: pointer;
+            width: 100%;
+            max-width: 280px;
+            text-align: center;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .button:hover {
+            background: linear-gradient(45deg, #2575fc, #6a11cb);
+            transform: translateY(-6px) scale(1.05);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.4);
+        }
+
+        .button:active {
+            background: linear-gradient(45deg, #6a11cb, #2575fc);
+            transform: translateY(3px) scale(1);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+        }
+
+        .button:focus {
+            outline: none;
+            box-shadow: 0 0 0 4px rgba(37, 117, 252, 0.5);
+        }
+
+        .button::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 300%;
+            height: 300%;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            animation: bubble-animation 2s infinite;
+            pointer-events: none;
+        }
+
+        @keyframes bubble-animation {
+            0% {
+                transform: translate(-50%, -50%) scale(0.1);
+                opacity: 0.5;
+            }
+            50% {
+                transform: translate(-50%, -50%) scale(1);
+                opacity: 0.2;
+            }
+            100% {
+                transform: translate(-50%, -50%) scale(0.1);
+                opacity: 0.5;
+            }
+        }
+
+        /* تصميم الشريط الجانبي */
         .sidebar {
             position: fixed;
             top: 0;
             right: -300px;
             width: 250px;
-            height: 100%;
-            background-color: rgba(75, 0, 130, 0.9);
-            color: #fff;
+            height: 15%;
+            background: rgba(0, 86, 179, 0.8);
             padding: 20px;
             transition: right 0.3s ease;
             z-index: 1000;
+            box-shadow: -4px 0 10px rgba(0, 0, 0, 0.5);
+            border-radius: 25% 25%;
         }
 
         .sidebar.open {
@@ -55,106 +135,256 @@
 
         .menu-icon {
             position: absolute;
-            top: 10px;
-            left: 10px;
+            top: 20px;
+            left: 20px;
             font-size: 30px;
             color: #fff;
             cursor: pointer;
             z-index: 1001;
+            transition: color 0.3s;
         }
 
-        /* إعداد الأزرار */
-        .button {
-            background-color: #2B124C;
+        .menu-icon:hover {
+            color: #0056b3;
+        }
+
+        /* تصميم العنوان */
+        .header h1 {
+            font-size: 48px;
             color: #fff;
-            padding: 15px;
-            margin: 10px 0;
-            border: none;
-            border-radius: 8px;
-            width: 80%;
-            max-width: 250px;
-            font-size: 16px;
-            cursor: pointer;
-            text-align: center;
-            transition: background-color 0.3s;
-        }
-
-        .button:hover {
-            background-color: #20212B;
-        }
-
-        .back-button {
-            background-color: #372e27;
-            color: #fff;
-            position: absolute;
-            top: 0;
-            left: 150px;
-            font-size: 10px;
-        }
-
-        /* إعداد رأس الصفحة */
-        .header {
-            text-align: center;
+            text-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
             margin-bottom: 20px;
         }
 
-        .header h1 {
-            font-size: 45px;
-            color: #E4E6D9;
-        }
-
-        .header h2, .header h3, .header h4, .header h5, .header h6, .header h7, .header h8 {
-            color: #000;
-            font-size: 15px;
-        }
-
-        .header h8 {
-            font-size: 30px;
-            margin: 15px;
-        }
-
-        /* إعدادات تبديل اللغة */
-        .language-switch {
-            color: #fff;
-            margin-top: 10px;
-            cursor: pointer;
-            font-size: 12px;
-        }
-
-        /* إعدادات المطور */
+        /* تصميم معلومات المطور */
         .developer-info {
             position: fixed;
             bottom: 10px;
-            font-size: 10px;
-            color: #fff;
+            font-size: 9px;
+            color: #ffffff;
+            opacity: 0.8;
         }
+
+        /* موقع زر الموسيقى */
+        .music-button {
+            position: fixed;
+            top: 26px;
+            right: 20px;
+            z-index: 500;
+            font-size: 19px;
+            background: #1a1a3d;
+            border-radius: 50%;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        /* تصميم زر الرجوع */
+        .back-button {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            padding: 10px 10px;
+            font-size: 10px;
+            background-color: #000;
+            color: white;
+            border: none;
+            border-radius: 50px;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.3s;
+            z-index: 500;
+        }
+
+        .back-button:hover {
+            background-color: #fff;
+            color: #000;
+            transform: scale(1.05);
+        }
+
+        .back-button:active {
+            transform: scale(0.98);
+        }
+        
+/* زر "كتب كلية العلوم القانونية والاقتصادية" */
+button.faculty {
+    background: linear-gradient(135deg, #6a0dad 20%, #4b0082 50%, #000000 100%); /* أخضر */
+    color: #ffffff; 
+    padding: 15px 30px; 
+    margin: 15px 0; 
+    border: none; 
+    border-radius: 30px; 
+    font-size: 12px; 
+    font-weight: bold; 
+    cursor: pointer; 
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2); 
+    transition: all 0.3s ease; 
+    width: 200px; 
+    text-align: center;
+}
+
+button.faculty:hover {
+    background: linear-gradient(45deg, #8bc34a, #4caf50); 
+    transform: scale(1.1); 
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3); 
+}
+
+button.faculty:active {
+    transform: scale(0.95);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+button.faculty:focus {
+    outline: none; 
+    box-shadow: 0 0 0 4px rgba(76, 175, 80, 0.5);
+}
+
+/* زر "مقاطع مفيدة" */
+button.useful-videos {
+    background: linear-gradient(45deg,#1a1a40, #ff0080); /* أزرق */
+    color: #ffffff; 
+    padding: 15px 30px; 
+    margin: 15px 0; 
+    border: none; 
+    border-radius: 30px; 
+    font-size: 12px; 
+    font-weight: bold; 
+    cursor: pointer; 
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2); 
+    transition: all 0.3s ease; 
+    width: 200px; 
+    text-align: center;
+}
+
+button.useful-videos:hover {
+    background: linear-gradient(45deg, #0288d1, #03a9f4); 
+    transform: scale(1.1); 
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3); 
+}
+
+button.useful-videos:active {
+    transform: scale(0.95);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+button.useful-videos:focus {
+    outline: none; 
+    box-shadow: 0 0 0 4px rgba(3, 169, 244, 0.5);
+}
+
+/* زر "أدوات ذكاء اصطناعي مفيدة" */
+button.ai-tools {
+    background: linear-gradient(45deg, #43cea2, #185a9d); /* برتقالي */
+    color: #ffffff; 
+    padding: 15px 30px; 
+    margin: 15px 0; 
+    border: none; 
+    border-radius: 30px; 
+    font-size: 12px; 
+    font-weight: bold; 
+    cursor: pointer; 
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2); 
+    transition: all 0.3s ease; 
+    width: 200px; 
+    text-align: center;
+}
+
+button.ai-tools:hover {
+    background: linear-gradient(45deg, #f57c00, #ff9800); 
+    transform: scale(1.1); 
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3); 
+}
+
+button.ai-tools:active {
+    transform: scale(0.95);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+button.ai-tools:focus {
+    outline: none; 
+    box-shadow: 0 0 0 4px rgba(255, 152, 0, 0.5);
+}
+
+/* زر "Group TD" */
+button.group-td-button {
+    background: linear-gradient(45deg, #ff7e5f, #feb47b); 
+    color: #fff; 
+    z-index:1000;
+    padding: 15px 30px; 
+    margin: 15px 0; 
+    border: none; 
+    border-radius: 30px; 
+    font-size: 10px; 
+    font-weight: bold; 
+    cursor: pointer; 
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2); 
+    transition: all 0.3s ease; 
+    width: 200px; 
+    text-align: center;
+}
+
+button.group-td-button:hover {
+    background: linear-gradient(45deg, #feb47b, #ff7e5f); 
+    transform: scale(1.1); 
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3); 
+}
+
+button.group-td-button:active {
+    transform: scale(0.95);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+button.group-td-button:focus {
+    outline: none; 
+    box-shadow: 0 0 0 4px rgba(255, 126, 95, 0.5);
+}
+
     </style>
 </head>
 <body>
+</div>
+<script src="welcome.js"></script>
+<!-- إضافة نقاط سوداء -->
+‏    <div class="dot" style="top: 20%; left: 10%; animation-delay: 0s;"></div>
+‏    <div class="dot" style="top: 25%; left: 30%; animation-delay: 0.2s;"></div>
+‏    <div class="dot" style="top: 30%; left: 50%; animation-delay: 0.4s;"></div>
+‏    <div class="dot" style="top: 35%; left: 70%; animation-delay: 0.6s;"></div>
+‏    <div class="dot" style="top: 40%; left: 90%; animation-delay: 0.8s;"></div>
+‏    <div class="dot" style="top: 45%; left: 20%; animation-delay: 1s;"></div>
+‏    <div class="dot" style="top: 50%; left: 40%; animation-delay: 1.2s;"></div>
+‏    <div class="dot" style="top: 55%; left: 60%; animation-delay: 1.4s;"></div>
+‏    <div class="dot" style="top: 60%; left: 80%; animation-delay: 1.6s;"></div>
+‏    <div class="dot" style="top: 65%; left: 90%; animation-delay: 1.8s;"></div>
+
     <div class="menu-icon" onclick="toggleSidebar()">☰</div>
     <div class="sidebar" id="sidebar">
         <h2>Réglages - الاعدادات ⚙️</h2>
         <div class="language-switch" onclick="toggleLanguage()">Changer la langue - تغيير اللغة</div>
     </div>
-    <div class="header">
-        <h1>المكتبة الجامعية</h1>
-        <h2>.</h2>
-        <h3>.</h3>
-        <h4>.</h4>
-        <h5>.</h5>
-        <h6>.</h6>
-        <h7>.</h7>
-    </div>
-    <button class="button" onclick="openSection('main')">كتب كلية العلوم القانونية والاقتصادية</button>
-    <button class="button" onclick="openSection('!!!')">كتب المدرسة العليا لعلوم الصحة</button>
-    <div>نافذة قيد الانشاء...</div>
+   <!-- المحتوى الخاص بالصفحة -->
+    <button class="music-button" onclick="toggleMusic()">🎵</button>
+    <audio id="backgroundMusic" loop>
+        <source src="music.mp3" type="audio/mpeg">
+        المتصفح الخاص بك لا يدعم تشغيل الموسيقى.
+</audio>
 
     <div class="header">
-        <h8>.</h8>
+
+    </div>
+       <button class="button faculty" onclick="openSection('main')">كتب كلية العلوم القانونية والاقتصادية</button>
+
+    <button class="button useful-videos" onclick="location.href='buff.html'">مقاطع مفيدة</button>
+
+    <button class="button ai-tools" onclick="window.location.href='tools.html'">ادوات ذكاء اصطناعي مفيدة</button>
+
+<button class="group-td-button" onclick="window.location.href='tdf.html'">Group TD</button>
+   <button class="button useful-videos" onclick="location.href='index1.html'"> جحا🤓Jou7A</button>  
+ 
+
+    <div class="header">
+        <h4></h4>
     </div>
 
     <div class="developer-info">
-        ® dev: Mohamed Salem/Yacoub 
+        ' dev: Mohamed Salem/Yacoub 
     </div>
 
     <div id="equationContainer"></div>
@@ -162,33 +392,47 @@
     <script>
         let isArabic = true;
         const equations = [
-            "📚 📖", "📒  📙📘", "0000000", "E = mc²", "a² + b² = c²",
-            "F = ma", "Δx * Δp ≥ ħ/2", "PV = nRT", "S = ut + ½at²", "P = m•g",
-            "a+kl/1", "justice", "ال ماه گدك ريگ لا تساف معاه ادگيگ", "من جد وجد",
-            "ومن زرع حصد", "من اراد العلى سهر الليالي", "هو العلم يعلو بالحياة سعادة",
-            "ويجعلها كالعلم محمودة العقبى"
-        ];
-
-        let index = 0;
+       "•", "•", "•", "•"
+        
+          ];
 
         function toggleSidebar() {
             document.getElementById('sidebar').classList.toggle('open');
         }
 
-        function toggleLanguage() {
+         function toggleLanguage() {
             isArabic = !isArabic;
             document.documentElement.lang = isArabic ? "ar" : "fr";
             document.dir = isArabic ? "rtl" : "ltr";
-            document.querySelector(".language-switch").textContent = isArabic ? "Changer la langue vers le français" : "تغيير اللغة للعربية";
-            document.querySelector("h1").textContent = isArabic ? "المكتبة الجامعية" : "Bibliothèque Universitaire";
-            document.querySelector(".button").textContent = isArabic ? "كلية العلوم القانونية والاقتصادية" : "Faculté de Droit et d'Économie";
+            
+            // تغيير النصوص للغة المختارة
+            document.querySelector(".language-switch").textContent = isArabic 
+                ? "Changer la langue vers le français" 
+                : "تغيير اللغة للعربية";
+
+            document.querySelector(".button.faculty").textContent = isArabic 
+                ? "كتب كلية العلوم القانونية والاقتصادية" 
+                : "Livres de la Faculté de Droit et d'Économie";
+
+            document.querySelector(".button.useful-videos").textContent = isArabic 
+                ? "مقاطع مفيدة" 
+                : "Vidéos utiles";
+
+            document.querySelector(".button.ai-tools").textContent = isArabic 
+                ? "ادوات ذكاء اصطناعي مفيدة" 
+                : "Outils d'intelligence artificielle utiles";
+        }
+
+        // وظيفة افتراضية لزر "openSection"
+        function openSection(section) {
+            alert("فتح القسم: " + section);
         }
 
         function openSection(section) {
             if (section === 'main') {
                 document.body.innerHTML = `
                     <div class="header">
-                        <button class="back-button button" onclick="location.reload()">العودة للصفحة الرئيسية - Retour</button>
+                        <button class="back-button button" onclick="location.reload()"> ➔ </button>
                         <h2>${isArabic ? "كلية العلوم القانونية والاقتصادية" : "Faculté de Droit et d'Économie"}</h2>
                     </div>
                     <button class="button" onclick="openSpecialty('الاقتصاد والتسيير')">${isArabic ? "الاقتصاد والتسيير" : "Économie et Gestion"}</button>
@@ -203,19 +447,17 @@
         function openSpecialty(specialty) {
             document.body.innerHTML = `
                 <div class="header">
-                    <button class="back-button button" onclick="openSection('main')">${isArabic ? "الرجوع" : "Retour"}</button>
+                    <button class="back-button button" onclick="openSection('main')">${isArabic ? "➔" : "➔"}</button>
                     <h2>${specialty}</h2>
                 </div>
                 <button class="button" onclick="openLevel('${specialty}', 'L1')">L1</button>
-                <button class="button" onclick="openLevel('${specialty}', 'L2')">L2</button>
-                <button class="button" onclick="openLevel('${specialty}', 'L3')">L3</button>
             `;
         }
 
         function openLevel(specialty, level) {
             document.body.innerHTML = `
                 <div class="header">
-                    <button class="back-button button" onclick="openSpecialty('${specialty}')">${isArabic ? "الرجوع" : "Retour"}</button>
+                    <button class="back-button button" onclick="openSpecialty('${specialty}')">${isArabic ? "➔" : "➔"}</button>
                     <h2>${specialty} - ${level}</h2>
                 </div>
                 <button class="button" onclick="openSemester('${specialty}', '${level}', 'S1')">S1</button>
@@ -223,20 +465,36 @@
             `;
         }
 
-        function openSemester(specialty, level, semester) {
-            let link = '';
-            // الروابط
-            if (specialty === 'الاقتصاد والتسيير') {
-                link = (level === 'L1' && semester === 'S1') ? 'https://drive.google.com/file/d/1-36P5EU7ObH3VF0FTEEpo_8UwzMSrtdn' : '';
-                link = (level === 'L1' && semester === 'S2') ? 'https://drive.google.com/file/d/1-4kio2R72Kk59Mj3yH_plepdHA0hN4or' : link;
-            } else if (specialty === 'المالية والمحاسبة') {
-                link = (level === 'L1' && semester === 'S1') ? 'https://drive.google.com/file/d/1-7rwTCkO1epFd5fYR-i4Oi88Uuwg_pGy' : '';
-                link = (level === 'L1' && semester === 'S2') ? 'https://drive.google.com/file/d/1-7rwTCkO1epFd5fYR-i4Oi88Uuwg_pGy' : link;
-            } // إضافة الروابط الأخرى هنا
-
+  function openSemester(specialty, level, semester) {
+    let link = '';
+    // الروابط القديمة
+    if (specialty === 'الاقتصاد والتسيير') {
+        link = (level === 'L1' && semester === 'S1') ? 'https://drive.google.com/drive/folders/152wHcD4O5bJd1aDmtD0u6HKLzKK1YxPV' : '';
+        link = (level === 'L1' && semester === 'S2') ? 'https://drive.google.com/drive/folders/1-ffPR2kL9fEBsC_C184t3lWRRS8sPenf' : link;
+    } else if (specialty === 'المالية والمحاسبة') {
+        link = (level === 'L1' && semester === 'S1') ? 'https://drive.google.com/drive/folders/10uXNSqA0jH3QrXAtlxMq-vuMmwrSZEg0' : '';
+        link = (level === 'L1' && semester === 'S2') ? 'https://drive.google.com/drive/folders/10uz7mFXte1orakUTov6aWI1zWpo0ltGd' : link;
+    }
+    // الروابط الجديدة
+    else if (specialty === 'القانون') {
+        if (level === 'L1') {
+            link = (semester === 'S1') ? 'https://drive.google.com/file/d/120zSK4tz_sZvWSpwnz9g8IcAlY4_Q6zq' : link;
+            link = (semester === 'S2') ? 'https://drive.google.com/file/d/126B6zWPAM8XUf1bKSnPaH8MB271u9vTy' : link;
+        }
+    } else if (specialty === 'البنوك والتأمين') {
+        if (level === 'L1') {
+            link = (semester === 'S1') ? 'https://drive.google.com/file/d/11Sw_bj_-pfed6vr1MbqKRCHqJ8PuHuMy' : link;
+            link = (semester === 'S2') ? 'https://drive.google.com/file/d/11UnEcR8G4T0qdPrckuAB5MYCPLO1OxeN' : link;
+        }
+    } else if (specialty === 'تسيير الموارد البشرية') {
+        if (level === 'L1') {
+            link = (semester === 'S1') ? 'https://drive.google.com/drive/folders/10NJpI8V6F8bRA4CY99mOrfnt5SNor3BK' : link;
+            link = (semester === 'S2') ? 'https://drive.google.com/drive/folders/10NwquRY-Akh9Iyss8W3ve1wHqL7CqJ0B' : link;
+        }
+    }
             document.body.innerHTML = `
                 <div class="header">
-                    <button class="back-button button" onclick="openLevel('${specialty}', '${level}')">${isArabic ? "الرجوع" : "Retour"}</button>
+                    <button class="back-button button" onclick="openLevel('${specialty}', '${level}')">${isArabic ? "➔" : "➔"}</button>
                     <h2>${specialty} - ${level} - ${semester}</h2>
                 </div>
                 <a class="button" href="${link}" target="_blank">${isArabic ? "تحميل الكتب" : "Télécharger les livres"}</a>
@@ -264,6 +522,67 @@
         }
 
         displayEquations();
+
+function displayEquations() {
+    const equationContainer = document.getElementById('equationContainer');
+    const equationElement = document.createElement('div');
+    equationElement.className = 'equation';
+    equationContainer.appendChild(equationElement);
+
+    setInterval(() => {
+        equationElement.textContent = equations[index];
+        equationElement.style.left = Math.random() * window.innerWidth + 'px';
+        equationElement.style.top = Math.random() * window.innerHeight + 'px';
+        equationElement.style.opacity = 1;
+
+        setTimeout(() => {
+            equationElement.style.opacity = 0;
+        }, 1000);
+
+        index = (index + 1) % equations.length;
+    }, 2000);
+}
+
+displayEquations();
+
+// دالة تشغيل/إيقاف الموسيقى
+function toggleMusic() {
+    const music = document.getElementById("backgroundMusic");
+    const musicButton = document.querySelector(".music-button");
+
+    if (music.paused) {
+        music.play();
+        musicButton.textContent = "🔊"; 
+    } else {
+        music.pause();
+        musicButton.textContent = "🔇"; 
+    }
+}
+
+document.addEventListener("DOMContentLoaded", function() {
+    const textElement = document.getElementById('typingEffect');
+    
+    textElement.style.animation = 'none'; 
+    textElement.offsetHeight;       textElement.style.animation = ''; 
+    
+    
+    let vibrationInterval = setInterval(() => {
+        if (navigator.vibrate) {
+  
+          navigator.vibrate(100); 
+        }
+    }, 200); 
+
+   
+    setTimeout(() => {
+        clearInterval(vibrationInterval);
+    }, 4000);
+    
+    
+    window.onbeforeunload = () => {
+        textElement.style.animation = 'none'; 
+        textElement.offsetHeight; 
+    };
+});
     </script>
 </body>
-</html>
