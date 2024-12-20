@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ar">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Training Report Generator</title>
+    <title>نموذج تقرير تدريب</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -11,8 +11,9 @@
             margin: 0;
             padding: 0;
             display: flex;
-            justify-content: center;
+            flex-direction: column;
             align-items: center;
+            justify-content: center;
             height: 100vh;
         }
 
@@ -21,43 +22,13 @@
             padding: 20px;
             border-radius: 8px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            width: 80%;
+            width: 90%;
             max-width: 800px;
             text-align: center;
         }
 
         h1 {
             margin-bottom: 20px;
-        }
-
-        .options button {
-            margin: 10px;
-            padding: 10px 20px;
-            font-size: 16px;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            background-color: #007bff;
-            color: #fff;
-            transition: background-color 0.3s ease;
-        }
-
-        .options button:hover {
-            background-color: #0056b3;
-        }
-
-        #form-container {
-            margin-top: 20px;
-        }
-
-        #editor-container {
-            margin-top: 20px;
-            display: none;
-        }
-
-        #editor-container textarea {
-            width: 100%;
-            height: 300px;
         }
 
         .input-field {
@@ -69,95 +40,145 @@
             border: 1px solid #ccc;
         }
 
-        button.download-btn {
-            margin-top: 10px;
+        button {
+            margin: 10px;
             padding: 10px 20px;
             font-size: 16px;
             border: none;
             border-radius: 4px;
             cursor: pointer;
-            background-color: #28a745;
+            background-color: #007bff;
             color: #fff;
             transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        button.download-btn {
+            background-color: #28a745;
         }
 
         button.download-btn:hover {
             background-color: #218838;
         }
-    </style>
-    <script src="https://cdn.tiny.cloud/1/7q4fujrpnvltd8eb91b2wxauh7kxns9m37xkwvop05dx8hk1/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>
-    <script>
-        tinymce.init({
-            selector: '#editor',
-            plugins: 'advlist autolink lists link image charmap print preview hr anchor pagebreak',
-            toolbar_mode: 'floating',
-        });
 
-        function selectTemplate(type) {
-            const formContainer = document.getElementById('form-container');
-            formContainer.innerHTML = '';
-            let formHtml = '';
+        button.clear-btn {
+            background-color: #dc3545;
+        }
 
-            switch (type) {
-                case 'document':
-                    formHtml = `
-                        <h2>Rédaction de document</h2>
-                        <input type="text" id="title" placeholder="Title" class="input-field">
-                        <textarea id="content" placeholder="Content" class="input-field"></textarea>
-                    `;
-                    break;
-                case 'memoire':
-                    formHtml = `
-                        <h2>Rédaction longue pour mémoire</h2>
-                        <input type="text" id="title" placeholder="Title" class="input-field">
-                        <textarea id="content" placeholder="Content" class="input-field"></textarea>
-                    `;
-                    break;
-                case 'rapport':
-                    formHtml = `
-                        <h2>Rédaction longue pour rapport de stage</h2>
-                        <input type="text" id="title" placeholder="Title" class="input-field">
-                        <textarea id="content" placeholder="Content" class="input-field"></textarea>
-                    `;
-                    break;
-                case 'presentation':
-                    formHtml = `
-                        <h2>Rédaction de présentation orale</h2>
-                        <input type="text" id="title" placeholder="Title" class="input-field">
-                        <textarea id="content" placeholder="Content" class="input-field"></textarea>
-                    `;
-                    break;
+        button.clear-btn:hover {
+            background-color: #c82333;
+        }
+
+        .editor-container {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+        }
+
+        .editor-container textarea {
+            width: 100%;
+            height: 300px;
+        }
+
+        .device-buttons button {
+            margin: 5px;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                width: 95%;
+                padding: 10px;
             }
 
-            formContainer.innerHTML = formHtml;
-            document.getElementById('editor-container').style.display = 'block';
-        }
+            h1 {
+                font-size: 24px;
+            }
 
-        function downloadReport() {
-            const title = document.getElementById('title').value;
-            const content = tinymce.get('editor').getContent();
-            const report = `Title: ${title}\n\nContent:\n${content}`;
+            .input-field {
+                padding: 8px;
+                margin: 8px 0;
+            }
 
-            const blob = new Blob([report], { type: 'text/plain;charset=utf-8' });
-            saveAs(blob, 'report.txt');
+            button {
+                margin: 5px;
+                padding: 8px 16px;
+                font-size: 14px;
+            }
+
+            .editor-container textarea {
+                height: 200px;
+            }
         }
+    </style>
+    <script src="https://cdn.tiny.cloud/1/7q4fujrpnvltd8eb91b2wxauh7kxns9m37xkwvop05dx8hk1/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            tinymce.init({
+                selector: '#editor',
+                plugins: 'advlist autolink lists link image charmap print preview hr anchor pagebreak',
+                toolbar: 'undo redo | formatselect | bold italic backcolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | removeformat | image | forecolor backcolor | table',
+                toolbar_mode: 'floating',
+                setup: function (editor) {
+                    editor.on('change', function () {
+                        localStorage.setItem('reportContent', editor.getContent());
+                    });
+                    editor.on('init', function () {
+                        const savedContent = localStorage.getItem('reportContent');
+                        if (savedContent) {
+                            editor.setContent(savedContent);
+                        }
+                    });
+                }
+            });
+
+            document.getElementById('openEditorBtn').addEventListener('click', function () {
+                document.querySelector('.editor-container').style.display = 'flex';
+            });
+
+            document.getElementById('downloadBtn').addEventListener('click', function () {
+                const title = document.getElementById('title').value;
+                const content = tinymce.get('editor').getContent();
+                const report = `
+                    <html>
+                        <head>
+                            <meta charset="UTF-8">
+                            <title>${title}</title>
+                        </head>
+                        <body>
+                            <h1>${title}</h1>
+                            ${content}
+                        </body>
+                    </html>
+                `;
+                const blob = new Blob([report], { type: 'application/msword;charset=utf-8' });
+                saveAs(blob, 'report.doc');
+            });
+
+            document.getElementById('clearStorageBtn').addEventListener('click', function () {
+                localStorage.removeItem('reportContent');
+                alert('تم مسح المحتوى المحفوظ!');
+                tinymce.get('editor').setContent('');
+            });
+        });
     </script>
 </head>
 <body>
     <div class="container">
-        <h1>Training Report Generator</h1>
-        <div class="options">
-            <button onclick="selectTemplate('document')">Rédaction de document</button>
-            <button onclick="selectTemplate('memoire')">Rédaction longue pour mémoire</button>
-            <button onclick="selectTemplate('rapport')">Rédaction longue pour rapport de stage</button>
-            <button onclick="selectTemplate('presentation')">Rédaction de présentation orale</button>
+        <h1>نموذج تقرير تدريب</h1>
+        <input type="text" id="title" placeholder="عنوان التقرير" class="input-field">
+        <div class="device-buttons">
         </div>
-        <div id="form-container"></div>
-        <div id="editor-container">
+        <button id="openEditorBtn">افتح المحرر</button>
+        <div class="editor-container">
             <textarea id="editor"></textarea>
-            <button class="download-btn" onclick="downloadReport()">Download Report</button>
+            <button id="downloadBtn" class="download-btn">تنزيل التقرير</button>
+            <button id="clearStorageBtn" class="clear-btn">مسح المحتوى المحفوظ</button>
         </div>
     </div>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
 </body>
 </html>
